@@ -1,0 +1,68 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+.leftSideBar {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+}
+.divImg {
+  position: absolute;
+  height: -webkit-fill-available;
+  background-color: #ffff00;
+}
+
+.dashboard {
+  background-color: rgb(255, 255, 255);
+  min-width: calc(100vw - 229px);
+  min-height: 100vh;
+  margin-left: 229px;
+  /* align-items: center; */
+}
+.dashboard h1 {
+  text-align: center;
+  margin-top: 25px;
+}
+.dashboard h2 {
+  text-align: center;
+  margin-top: 25px;
+}
+.buttonStyle {
+  justify-content: center;
+  display: flex;
+  gap: 94px;
+  margin-top: 55px;
+  flex-direction: row;
+}
+.userCount {
+  height: 80px;
+  width: 135px;
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  background-color: #0a660d;
+  border-radius: 10px;
+}
+.bondsmanCount {
+  height: 80px;
+  width: 135px;
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  background-color: #0001fc;
+  border-radius: 10px;
+}
+.adUpload {
+  margin-top: 10px;
+  height: 100%;
+  margin: 10px 70px 0 70px;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 8px 2px rgba(131, 131, 131, 0.5);
+}
+.fileUpload {
+  background-color: #0080dc14;
+  border-style: dotted;
+}

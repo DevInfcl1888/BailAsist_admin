@@ -1,0 +1,212 @@
+/* Full Page Layout */
+* {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  background-color: #ffff00;
+  font-family: Arial, Helvetica, sans-serif;
+
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+.container > div {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 📱 Responsive (stack vertically on small screens) */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* from row → column */
+  }
+}
+.adminLoginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+}
+
+/* ✅ Logo: top-left fixed position */
+.adminLogo {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 170px;
+  height: auto;
+  border-radius: 50%;
+  padding: 8px;
+  box-shadow: 0 0 10px rgba(0, 110, 255, 0.2);
+}
+
+/* Login Box */
+.loginBox {
+  background-color: #0001fc;
+  color: white;
+  width: 450px;
+  text-align: center;
+  padding: 33px 86px 57px 71px;
+}
+
+.adminLoginContainer h1 {
+  margin-bottom: 25px;
+  font-size: 40px;
+  color: #0001fc;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 13px;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  margin-top: 24px;
+  font-size: 14px;
+}
+
+button {
+  width: 106%;
+  background-color: white;
+  color: #0001fc;
+  font-weight: bold;
+  margin-top: 24px;
+  padding: 13px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+}
+
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.passwordWrapper input {
+  width: 100%;
+  padding-right: 40px; /* space for eye icon */
+  box-sizing: border-box;
+}
+
+.toggleEye {
+  /* position: absolute; */
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #333;
+  user-select: none;
+}
+
+.toggleEye:hover {
+  color: #0001fc; /* same as theme color */
+}
+
+/* 🌐 Small laptops/tablets */
+@media (max-width: 1024px) {
+  .loginBox {
+    width: 70%;
+    padding: 40px 50px;
+  }
+
+  .adminLoginContainer h1 {
+    font-size: 32px;
+  }
+
+  .adminLogo {
+    width: 140px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+/* 📱 Tablets and large mobiles */
+@media (max-width: 768px) {
+  .loginBox {
+    width: 85%;
+    padding: 30px 25px 40px 25px;
+  }
+
+  .adminLoginContainer h1 {
+    font-size: 28px;
+  }
+
+  .adminLogo {
+    position: static;
+    display: block;
+    margin: 20px auto 10px;
+    width: 120px;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* 📲 Small mobiles */
+@media (max-width: 480px) {
+  html,
+  body {
+    background-color: #ffff66; /* slightly lighter yellow for readability */
+  }
+
+  .loginBox {
+    width: 92%;
+    padding: 25px 18px;
+  }
+
+  .adminLoginContainer h1 {
+    font-size: 24px;
+  }
+
+  .formGroup label {
+    font-size: 14px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    font-size: 13px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  button {
+    padding: 11px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .adminLogo {
+    width: 100px;
+    margin-top: 15px;
+  }
+}
