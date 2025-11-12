@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import styles from "./AdminLogin.module.css"; // 👈 CSS import
-import logo from "../../Assets/logo.jpg";
+import logo from "../../Assets/logo.png";
 import axiosInstace from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError("");
     try {
       const res = await axiosInstace.post(
@@ -26,8 +29,6 @@ function AdminLogin() {
           withCredentials: true,
         }
       );
-      localStorage.setItem("accessToken", res.data.accessToken);
-      localStorage.setItem("refreshToken", res.data.refreshToken);
       console.log("login success", res);
       if (res.status === 200) {
         alert("Login success");
@@ -36,11 +37,16 @@ function AdminLogin() {
     } catch (error) {
       if (error.response?.data.message) {
         setError(error.response?.data.message);
+        setLoading(false);
       } else {
         setError("Something went wrong. Please try again.");
+        setLoading(false);
       }
+
       console.log("Error", error);
       console.log("error.response?.data.message", error.response?.data.message);
+    } finally {
+      setLoading(false);
     }
     console.log("Username:", username, "Password:", password);
   };
@@ -70,7 +76,6 @@ function AdminLogin() {
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
-
               <div className={styles.formGroup}>
                 <label>
                   Password{" "}
@@ -78,22 +83,34 @@ function AdminLogin() {
                     *
                   </span>
                 </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  maxLength={10}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <span
-                  className={styles.toggleEye}
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? "🙈" : "👁️"}
-                </span>
+
+                <div className={styles.inputWrapper}>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    maxLength={10}
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <span
+                    className={styles.toggleEye}
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? "🙈" : "👁️"}
+                  </span>
+                </div>
               </div>
+
               {error && <p style={{ color: "red" }}>{error}</p>}
-              <button type="submit">Submit</button>
+              <button type="submit" className={styles.button}>
+                {loading ? (
+                  <div className={styles.loaderContainer}>
+                    <div className={styles.loader}></div>
+                  </div>
+                ) : (
+                  "Submit"
+                )}
+              </button>
             </form>
           </div>
         </div>

@@ -1,0 +1,121 @@
+.leftSideBar {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+}
+.divImg {
+   position: fixed;
+  top: 0;
+  left: 0;
+  width: 229px;
+  height: 100vh;
+  background-color: #ffff00;
+  
+  /* ✅ Added for proper layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centers logo + button horizontally */
+  justify-content: flex-start; /* keeps items at top with spacing */
+  gap: 20px; /* space between logo and button */
+  padding-top: 20px; /* little breathing room */
+}
+
+/* make sizing consistent */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Large screens (≥1200px) */
+@media (min-width: 1200px) {
+  .divImg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 229px; /* matches dashboard margin-left */
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .leftSideBar {
+    flex-direction: column;
+    width: 229px;
+    min-height: 100vh;
+  }
+}
+
+/* Medium / Tablet (768px–1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .divImg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100vh;
+  }
+
+  .leftSideBar {
+    flex-direction: column;
+    width: 200px;
+    min-height: 100vh;
+  }
+}
+
+/* Small / Mobile (≤767px) */
+@media (max-width: 767px) {
+  .divImg {
+    position: relative;
+    width: 100%;
+    height: auto;
+    background-color: #ffff00; /* keep same look */
+  }
+
+  .leftSideBar {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+/* Extra small (≤420px) */
+@media (max-width: 420px) {
+  .divImg img {
+    height: 140px;
+    object-fit: contain;
+  }
+}
+.btnStyle {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #000000;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  margin-top: 20px;
+}
+
+.btnStyle:hover {
+  background-color: #f3f3f3;
+  transform: translateY(-1px);
+}
+
+.btnStyle:active {
+  transform: scale(0.98);
+}
+
+/* Responsive: mobile */
+@media (max-width: 767px) {
+  .btnStyle {
+    font-size: 14px;
+    padding: 9px 14px;
+    margin-top: 15px;
+  }
+}

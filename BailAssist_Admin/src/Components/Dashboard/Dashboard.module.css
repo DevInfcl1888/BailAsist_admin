@@ -26,7 +26,7 @@
 }
 .dashboard h2 {
   text-align: center;
-  margin-top: 25px;
+  margin-bottom: 15px;
 }
 .buttonStyle {
   justify-content: center;
@@ -55,14 +55,195 @@
   background-color: #0001fc;
   border-radius: 10px;
 }
-.adUpload {
+/* .adUpload {
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  padding: 38px 5px 58px 5px;
+
   margin-top: 10px;
+  display: flex;
   height: 100%;
-  margin: 10px 70px 0 70px;
+  margin: 33px 100px 15px 70px;
   background-color: #ffffff;
   box-shadow: 2px 2px 8px 2px rgba(131, 131, 131, 0.5);
 }
 .fileUpload {
+  border-radius: 8px;
   background-color: #0080dc14;
-  border-style: dotted;
+  border: 2px dashed #0091ff5b;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 200px;
+  width: 78%;
+}  */
+.adUpload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* keep heading on top */
+  padding: 25px 0 40px 0;
+  margin: 40px auto;
+  width: 85%;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 8px 2px rgba(131, 131, 131, 0.5);
+  border-radius: 10px;
+}
+
+.fileUpload {
+  border-radius: 8px;
+  background-color: #0080dc14;
+  border: 2px dashed #0091ff5b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: 85%;
+  margin-top: 15px;
+}
+
+.uploadText {
+  text-align: center;
+  color: #333;
+}
+
+.uploadText h3 {
+  margin: 8px 0 4px;
+}
+
+.uploadText p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.uploadText span {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Optional: below upload info */
+.fileInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.status {
+  color: green;
+  font-weight: 500;
+}
+
+/* ===== Responsive overrides for DASHBOARD ===== */
+
+/* Large screens (≥1200px) */
+@media (min-width: 1200px) {
+  .dashboard {
+    margin-left: 229px;
+    min-width: calc(100vw - 246px);
+    min-height: 100vh;
+  }
+
+  .adUpload {
+    width: calc(100% - 320px);
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 25px 24px 40px 24px;
+  }
+
+  .fileUpload {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Medium / Tablet (768px–1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .dashboard {
+    margin-left: 200px;
+    min-width: calc(100vw - 200px);
+  }
+
+  .adUpload {
+    width: calc(100% - 240px);
+    max-width: 900px;
+    margin: 32px auto;
+    padding: 22px 18px 34px 18px;
+  }
+
+  .fileUpload {
+    width: 100%;
+    height: 180px;
+  }
+
+  .buttonStyle {
+    gap: 40px;
+  }
+}
+
+/* Small / Mobile (≤767px) */
+@media (max-width: 767px) {
+  .dashboard {
+    margin-left: 0;
+    min-width: 100%;
+    padding: 0 12px;
+  }
+
+  .adUpload {
+    width: 100%;
+    margin: 18px 0;
+    padding: 18px 12px 26px 12px;
+    box-shadow: 1px 1px 6px rgba(131, 131, 131, 0.25);
+    border-radius: 8px;
+  }
+
+  .fileUpload {
+    width: 100%;
+    height: 160px;
+  }
+
+  .buttonStyle {
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+    margin-top: 18px;
+  }
+
+  .userCount,
+  .bondsmanCount {
+    width: calc(100% - 48px);
+    max-width: 360px;
+  }
+
+  .fileInfo,
+  .uploadText p {
+    word-break: break-word;
+  }
+}
+
+/* Extra small (≤420px) */
+@media (max-width: 420px) {
+  .adUpload {
+    padding: 14px 10px 20px 10px;
+  }
+
+  .fileUpload {
+    height: 140px;
+  }
+
+  .uploadText h3 {
+    font-size: 16px;
+  }
+
+  .uploadText p {
+    font-size: 13px;
+  }
+
+  .dashboard h1 {
+    font-size: 18px;
+  }
 }

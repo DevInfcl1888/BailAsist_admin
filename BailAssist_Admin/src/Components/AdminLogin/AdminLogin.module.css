@@ -3,6 +3,7 @@
   margin: 0;
   padding: 0;
 }
+
 .container {
   background-color: #ffff00;
   font-family: Arial, Helvetica, sans-serif;
@@ -18,6 +19,7 @@
   box-sizing: border-box;
   overflow-x: hidden;
 }
+
 .container > div {
   flex: 1;
   padding: 20px;
@@ -27,15 +29,15 @@
 /* 📱 Responsive (stack vertically on small screens) */
 @media (max-width: 768px) {
   .container {
-    flex-direction: column; /* from row → column */
+    flex-direction: column;
   }
 }
+
 .adminLoginContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* height: 100vh; */
 }
 
 /* ✅ Logo: top-left fixed position */
@@ -50,85 +52,138 @@
   box-shadow: 0 0 10px rgba(0, 110, 255, 0.2);
 }
 
-/* Login Box */
+/* ✅ LOGIN BOX (clean + fixed inputs + responsive) */
 .loginBox {
   background-color: #0001fc;
   color: white;
-  width: 450px;
+  width: 587px;
   text-align: center;
-  padding: 33px 86px 57px 71px;
+  padding: 35px 50px 45px;
+  border-radius: 3px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
+.loginBox p {
+  font-size: 15px;
+  margin-bottom: 25px;
+  color: #f5f5f5;
+  line-height: 1.4;
+}
+
+/* ✅ Headings */
 .adminLoginContainer h1 {
   margin-bottom: 25px;
   font-size: 40px;
   color: #0001fc;
 }
 
+/* ✅ Form and Inputs */
 .formGroup {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-input[type="text"],
-input[type="password"] {
   width: 100%;
-  padding: 13px;
-  border-radius: 2px;
-  border: none;
-  outline: none;
-  margin-top: 24px;
-  font-size: 14px;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
-button {
-  width: 106%;
-  background-color: white;
-  color: #0001fc;
-  font-weight: bold;
-  margin-top: 24px;
-  padding: 13px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.2s;
+.formGroup label {
+  font-size: 15px;
+  display: block;
+  margin-bottom: 5px;
 }
 
-button:hover {
-  background-color: #f0f0f0;
-}
-
-.passwordWrapper {
+.inputWrapper {
   position: relative;
   width: 100%;
 }
 
-.passwordWrapper input {
+.inputWrapper input,
+input[type="text"],
+input[type="password"] {
   width: 100%;
-  padding-right: 40px; /* space for eye icon */
+  padding: 12px 281px 12px 12px;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  font-size: 15px;
   box-sizing: border-box;
 }
 
+/* ✅ Eye icon inside password field */
 .toggleEye {
-  /* position: absolute; */
-  right: 10px;
+  position: absolute;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 18px;
   color: #333;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s;
   user-select: none;
 }
 
 .toggleEye:hover {
-  color: #0001fc; /* same as theme color */
+  color: #ffffff;
+  opacity: 1;
+}
+
+/* ✅ Submit button */
+.button {
+  width: 100%;
+  background-color: white;
+  color: #0001fc;
+  font-weight: 600;
+  margin-top: 15px;
+  padding: 12px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 15px;
+}
+
+.button:hover {
+  background-color: #f3f3f3;
+  transform: translateY(-1px);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+/* ✅ Loader */
+.loader {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #cfd0d1;
+  border-top-color: #0091ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
 /* 🌐 Small laptops/tablets */
 @media (max-width: 1024px) {
   .loginBox {
     width: 70%;
-    padding: 40px 50px;
+    padding: 30px 35px 40px;
   }
 
   .adminLoginContainer h1 {
@@ -139,7 +194,7 @@ button:hover {
     width: 140px;
   }
 
-  button {
+  .button {
     width: 100%;
   }
 }
@@ -148,7 +203,7 @@ button:hover {
 @media (max-width: 768px) {
   .loginBox {
     width: 85%;
-    padding: 30px 25px 40px 25px;
+    padding: 28px 25px 35px;
   }
 
   .adminLoginContainer h1 {
@@ -162,9 +217,19 @@ button:hover {
     width: 120px;
   }
 
+  .inputWrapper input {
+    font-size: 14px;
+    padding: 11px 38px 11px 10px;
+  }
+
+  .toggleEye {
+    right: 10px;
+    font-size: 17px;
+  }
+
   input[type="text"],
   input[type="password"],
-  button {
+  .button {
     width: 100%;
     box-sizing: border-box;
   }
@@ -174,12 +239,12 @@ button:hover {
 @media (max-width: 480px) {
   html,
   body {
-    background-color: #ffff66; /* slightly lighter yellow for readability */
+    background-color: #ffff66;
   }
 
   .loginBox {
     width: 92%;
-    padding: 25px 18px;
+    padding: 25px 20px;
   }
 
   .adminLoginContainer h1 {
@@ -190,17 +255,19 @@ button:hover {
     font-size: 14px;
   }
 
-  input[type="text"],
-  input[type="password"] {
+  .inputWrapper input {
     font-size: 13px;
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
+    padding: 10px 36px 10px 10px;
   }
 
-  button {
-    padding: 11px;
+  .toggleEye {
+    right: 8px;
+    font-size: 16px;
+  }
+
+  .button {
     font-size: 14px;
+    padding: 11px;
     width: 100%;
     box-sizing: border-box;
   }
@@ -208,5 +275,11 @@ button:hover {
   .adminLogo {
     width: 100px;
     margin-top: 15px;
+  }
+
+  .loader {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
   }
 }

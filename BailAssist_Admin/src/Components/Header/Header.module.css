@@ -1,0 +1,101 @@
+
+/* Title section */
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  color: #111;
+}
+
+/* Search + Add button container */
+.rightSide {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap; /* ✅ ensures wrapping on small screens */
+}
+
+.searchBox input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  width: 220px;
+  transition: all 0.2s ease;
+}
+
+.searchBox input:focus {
+  border-color: #0056ff;
+  box-shadow: 0 0 3px #0056ff;
+}
+
+/* Add Button */
+/* .addBtn {
+  background-color: #0056ff;
+  margin-left: 139px;
+  margin-right: 50px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.addBtn:hover {
+  background-color: #0041d8;
+  transform: translateY(-1px);
+} */
+
+/* ✅ RESPONSIVE DESIGN */
+
+/* Tablet (≤1024px) */
+@media (max-width: 1024px) {
+  .title {
+    font-size: 26px;
+  }
+  .searchBox input {
+    width: 200px;
+  }
+}
+
+/* Mobile (≤768px) */
+@media (max-width: 768px) {
+  .headerBar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .rightSide {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .searchBox input,
+  .addBtn {
+    width: 100%;
+  }
+}
+
+/* Extra small (≤420px) */
+@media (max-width: 420px) {
+  .title {
+    font-size: 20px;
+  }
+  .searchBox input {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+  .addBtn {
+    font-size: 14px;
+    padding: 9px 10px;
+  }
+}

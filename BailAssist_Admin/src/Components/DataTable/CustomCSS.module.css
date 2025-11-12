@@ -1,0 +1,62 @@
+.bondsmanHeader .title {
+  font-size: 34px;
+  margin-right: 229px;
+}
+
+.userHeader .title {
+  font-size: 30px;
+  color: #222;
+}
+
+.headerBar_user {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.headerBar_bondsman h2 {
+  margin-right: 235px;
+  font-size: 34px;
+}
+.headerBar_bondsman {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.headerBar_user h2 {
+  margin-right: 235px;
+  font-size: 34px;
+}
+
+.addBtn_user {
+  background-color: #0056ff;
+  margin-left: 183px;
+  margin-right: 50px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.addBtn_user:hover {
+  background-color: #0041d8;
+  transform: translateY(-1px);
+}
+
+.addBtn_bondsman {
+  background-color: #ffffff;
+  margin-left: 203px;
+  margin-right: 50px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
