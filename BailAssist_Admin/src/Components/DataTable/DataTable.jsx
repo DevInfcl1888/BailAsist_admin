@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./DataTable.module.css";
 import HeaderBar from "../Header/Header";
 
-const DataTable = () => {
+const DataTable = ({ listName, candidate, onAddClick }) => {
   // Dummy Data
   const data = [
     {
@@ -22,16 +22,21 @@ const DataTable = () => {
       flag: "🇮🇳",
     },
   ];
-
+  const titleClass =
+    candidate === "User"
+      ? `${styles.title} ${styles.headerBar_user}`
+      : `${styles.title} ${styles.headerBar_bondsman}`;
   return (
     <>
-      {/* <div className={styles.headerBar}>
-        <h2>{listName}</h2>
+      <div className={styles.headerBar}>
+        <h2 className={titleClass}>{listName}</h2>
         <div className={styles.searchBox}>
           <input placeholder="Search by Name, Phone No" />
         </div>
-        <button className={styles.addBtn}>➕ Add {candidate}</button>
-      </div> */}
+        <button className={styles.addBtn} onClick={onAddClick}>
+          ✚ Add {candidate}
+        </button>
+      </div>
       <div className={styles.tableContainer}>
         <table className={styles.bondsmanTable}>
           <thead>

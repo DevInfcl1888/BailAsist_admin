@@ -5,13 +5,16 @@ import { useNavigate } from "react-router-dom";
 import axiosInstace from "../../utils/axiosInstance";
 import logo from "../../Assets/logo.png";
 import styles from "./Dashboard.module.css";
-import headerStyles from "../DataTable/CustomCSS.module.css";
 import Sidebar from "../Sidebar/Sidebare";
 import DataTable from "../DataTable/DataTable";
-import HeaderBar from "../Header/Header";
+import Imglogo from "../../Assets/image.png";
+import AddUser from "../AddUserTable/AddUserTable";
 
 function Dashboard() {
-  //   const navigate = useNavigate();
+  const [showAddUser, setShowAddUser] = useState(false);
+  const [currentType, setCurrentType] = useState("");
+  const [showAddBondsman, setShowAddBondsman] = useState("");
+  const navigate = useNavigate();
   //   const [loading, setLoading] = useState(true);
   //   const [admin, setAdmin] = useState(null);
   //   const [dashboard, setDashboard] = useState({
@@ -45,6 +48,25 @@ function Dashboard() {
   //     } catch (error) {}
   //   }, []);
 
+  const handleUserAddClick = (type) => {
+    setCurrentType(type);
+    setShowAddUser(true);
+    navigate("/AddUser", {
+      state: {
+        candidate: type,
+      },
+    });
+  };
+
+  const handleBondsmanAddClick = (type) => {
+    setCurrentType(type);
+    setShowAddBondsman(true);
+    navigate("/AddUser", {
+      state: {
+        candidate: type,
+      },
+    });
+  };
   return (
     <>
       <div className={styles.leftSideBar}>
@@ -53,14 +75,15 @@ function Dashboard() {
           <h1>Admin Dashboard</h1>
 
           <div className={styles.buttonStyle}>
-            <div className={styles.bondsmanCount}>Total Bondsman 4</div>
-            <div className={styles.userCount}>Total User 4</div>
+            <div className={styles.bondsmanCount}>Total Bondsman {}</div>
+            <div className={styles.userCount}>Total User {}</div>
           </div>
           <div className={styles.adUpload}>
             <h2>Advertising</h2>
 
             <div className={styles.fileUpload}>
               <div className={styles.uploadText}>
+                <img src={Imglogo} alt="" height={"60px"} />
                 <h3>Drag & Drop</h3>
                 <p>or select files from device</p>
                 <span>max. 50MB</span>
@@ -68,25 +91,34 @@ function Dashboard() {
             </div>
 
             <div className={styles.fileInfo}>
-              <p>📄 my.pdf &nbsp; 60 KB of 120 KB •</p>
+              <p>📝 my.pdf &nbsp; 60 KB of 120 KB •</p>
               <span className={styles.status}>✔ Completed</span>
             </div>
           </div>
         </div>
       </div>
+      {
+        showAddUser ? (
+          <AddUser candidate={currentType} />
+        ) : (
+          <DataTable
+            candidate={"User"}
+            listName="User List"
+            onAddClick={() => handleUserAddClick("User")}
+          />
+        )
+        // ✅ pass handler here
+      }
 
-      <HeaderBar
-        customClass={`${headerStyles.headerBar_bondsman} ${headerStyles.addBtn_bondsman}`}
-        candidate={"Bondsman"}
-        listName={"Bondsman User list"}
-      />
-      <DataTable />
-      <HeaderBar
-        customClass={`${headerStyles.headerBar_user} ${headerStyles.addBtn_user}`}
-        candidate={"User"}
-        listName={"User list"}
-      />
-      <DataTable />
+      {showAddBondsman ? (
+        <AddUser candidate={currentType} />
+      ) : (
+        <DataTable
+          candidate={"Bondsman"}
+          listName="Bondsman User List"
+          onAddClick={() => handleBondsmanAddClick("Bondsman")} // ✅ pass handler here
+        />
+      )}
     </>
   );
 }

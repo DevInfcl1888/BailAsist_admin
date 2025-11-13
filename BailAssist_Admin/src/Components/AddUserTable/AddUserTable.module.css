@@ -1,0 +1,159 @@
+/* Overall layout */
+.pageContainer {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+/* Placeholder space for sidebar */
+.pageContainer > *:first-child {
+  flex-shrink: 0;
+}
+
+/* Form area */
+.formContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  background: #ffffff;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+/* Profile image and edit button */
+.profileSection {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.profileImg {
+  width: 85px;
+  height: 85px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.editBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #0056ff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Form fields */
+.form {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputGroup label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.inputGroup label span {
+  color: red;
+}
+
+.inputGroup input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+.inputGroup input:focus {
+  border-color: #0056ff;
+  box-shadow: 0 0 3px rgba(0,86,255,0.4);
+}
+
+/* Save Button */
+.saveBtn {
+  background-color: #0023ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saveBtn:hover {
+  background-color: #0018cc;
+  transform: translateY(-1px);
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 1024px) {
+  .formContainer {
+    padding: 30px 15px;
+  }
+  .form {
+    max-width: 340px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pageContainer {
+    flex-direction: column;
+  }
+  .formContainer {
+    border-radius: 0;
+    width: 100%;
+    box-shadow: none;
+  }
+  .title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 20px;
+  }
+  .form {
+    max-width: 90%;
+  }
+  .inputGroup input {
+    font-size: 14px;
+  }
+  .saveBtn {
+    font-size: 14px;
+  }
+}

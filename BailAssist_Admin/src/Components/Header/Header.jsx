@@ -25,4 +25,20 @@ const HeaderBar = ({ listName, candidate, customClass, style }) => {
   );
 };
 
+// const HeaderBar = ({ customClass, listName, candidate }) => {
+//   return (
+//     <div className={`${styles.headerBar} ${customClass}`}>
+//       <h2 className={styles.title}>{listName}</h2>
+
+//       <div className={styles.rightSide}>
+//         <div className={styles.searchBox}>
+//           <input type="text" placeholder="Search by Name, Phone No..." />
+//         </div>
+
+//         <button className={styles.addBtn}>Add {candidate}</button>
+//       </div>
+//     </div>
+//   );
+// };
+
 export default HeaderBar;

@@ -10,9 +10,9 @@
 /* Search + Add button container */
 .rightSide {
   display: flex;
-  align-items: center;
+  align-items: end;
   gap: 10px;
-  flex-wrap: wrap; /* ✅ ensures wrapping on small screens */
+  flex-wrap: wrap;
 }
 
 .searchBox input {
@@ -30,7 +30,8 @@
 }
 
 /* Add Button */
-/* .addBtn {
+
+.addBtn {
   background-color: #0056ff;
   margin-left: 139px;
   margin-right: 50px;
@@ -42,11 +43,10 @@
   font-weight: 600;
   transition: all 0.2s ease;
 }
-
 .addBtn:hover {
   background-color: #0041d8;
   transform: translateY(-1px);
-} */
+}
 
 /* ✅ RESPONSIVE DESIGN */
 
