@@ -15,38 +15,24 @@ function Dashboard() {
   const [currentType, setCurrentType] = useState("");
   const [showAddBondsman, setShowAddBondsman] = useState("");
   const navigate = useNavigate();
-  //   const [loading, setLoading] = useState(true);
-  //   const [admin, setAdmin] = useState(null);
-  //   const [dashboard, setDashboard] = useState({
-  //     totalBondsman: 0,
-  //     totalUsers: 0,
-  //     bondsmanList: [],
-  //     userList: [],
-  //   });
+  // const [loading, setLoading] = useState(true);
 
-  //   useEffect( async() => {
-  //     const token = localStorage.getItem("accessToken");
-  //     if (!token) {
-  //       navigate("/");
-  //       return;
-  //     }
+  // const [error, setError] = useState("");
+  // useEffect(async () => {
+  //   const token = localStorage.getItem("accessToken");
+  //   if (!token) {
+  //     navigate("/");
+  //     return;
+  //   }
 
-  //     try {
-  //       setLoading(true);
-  //       const [bondsmanRes, userRes]= await Promise.all([
-  // axiosInstace.post("/adminLogout"),
-  // axiosInstace.post("/createNewBondsman"),
-  // axiosInstace.post("/adminLogout"),
-  // axiosInstace.post("/adminLogout"),
-  // axiosInstace.post("/adminLogout"),
-  // axiosInstace.post("/adminLogout"),
-  // axiosInstace.post("/adminLogout"),
-  // axiosInstace.post("/adminLogout"),
-  // axiosInstace.post("/adminLogout"),
-
-  //       ])
-  //     } catch (error) {}
-  //   }, []);
+  //   try {
+  //     setLoading(true);
+  //     const res = await axiosInstace.post("/admin/listAllActiveBondsman");
+  //     console.log("res", res);
+  //   } catch (err) {
+  //     setError(err);
+  //   }
+  // });
 
   const handleUserAddClick = (type) => {
     setCurrentType(type);
