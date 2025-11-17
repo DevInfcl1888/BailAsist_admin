@@ -14,25 +14,48 @@ function Dashboard() {
   const [showAddUser, setShowAddUser] = useState(false);
   const [currentType, setCurrentType] = useState("");
   const [showAddBondsman, setShowAddBondsman] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [response, setResponse] = useState({
+    bondsman: { listAllBondsman: [] },
+    users: { totalUsers: 0 },
+    userData: { allUsers: [] },
+  });
   const navigate = useNavigate();
-  // const [loading, setLoading] = useState(true);
 
-  // const [error, setError] = useState("");
-  // useEffect(async () => {
-  //   const token = localStorage.getItem("accessToken");
-  //   if (!token) {
-  //     navigate("/");
-  //     return;
-  //   }
+  const [error, setError] = useState("");
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true);
+        const [bondsmanRes, usersRes, usersData] = await Promise.all([
+          axiosInstace.get("/api/v1/admin/getBondsmanDetails"),
+          axiosInstace.get("/api/v1/admin/getTotalUsersCount"),
+          axiosInstace.get("/api/v1/admin/getAllUsers"),
+        ]);
 
-  //   try {
-  //     setLoading(true);
-  //     const res = await axiosInstace.post("/admin/listAllActiveBondsman");
-  //     console.log("res", res);
-  //   } catch (err) {
-  //     setError(err);
-  //   }
-  // });
+        setResponse({
+          bondsman: bondsmanRes,
+          users: usersRes,
+          userData: usersData,
+        });
+        setLoading(false);
+        // console.log(
+        //   "bondsmanRes?.data?.isBondsmanAllExist",
+        //   bondsmanRes?.data?.isBondsmanAllExist
+        // );
+      } catch (err) {
+        setError(
+          err?.response?.data?.message || err.message || "Something went wrong"
+        );
+        console.log(err);
+        console.log(err?.response?.data?.message);
+        console.log(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleUserAddClick = (type) => {
     setCurrentType(type);
@@ -61,8 +84,13 @@ function Dashboard() {
           <h1>Admin Dashboard</h1>
 
           <div className={styles.buttonStyle}>
-            <div className={styles.bondsmanCount}>Total Bondsman {}</div>
-            <div className={styles.userCount}>Total User {}</div>
+            <div className={styles.bondsmanCount}>
+              Total Bondsman{" "}
+              {response.bondsman?.data?.isBondsmanAllExist.length}
+            </div>
+            <div className={styles.userCount}>
+              Total User {response.users?.data?.count}
+            </div>
           </div>
           <div className={styles.adUpload}>
             <h2>Advertising</h2>
@@ -76,6 +104,7 @@ function Dashboard() {
               </div>
             </div>
 
+            {/* {error && <p style={{ color: "red" }}>Error: {error}</p>} */}
             <div className={styles.fileInfo}>
               <p>📝 my.pdf &nbsp; 60 KB of 120 KB •</p>
               <span className={styles.status}>✔ Completed</span>
@@ -90,6 +119,9 @@ function Dashboard() {
           <DataTable
             candidate={"User"}
             listName="User List"
+            data={response?.userData?.data?.User}
+            error={error}
+            loading={loading}
             onAddClick={() => handleUserAddClick("User")}
           />
         )
@@ -102,6 +134,9 @@ function Dashboard() {
         <DataTable
           candidate={"Bondsman"}
           listName="Bondsman User List"
+          data={response?.bondsman?.data?.isBondsmanAllExist}
+          error={error}
+          loading={loading}
           onAddClick={() => handleBondsmanAddClick("Bondsman")} // ✅ pass handler here
         />
       )}

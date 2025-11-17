@@ -1,27 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./DataTable.module.css";
 import HeaderBar from "../Header/Header";
+import axiosInstace from "../../utils/axiosInstance";
 
-const DataTable = ({ listName, candidate, onAddClick }) => {
-  // Dummy Data
-  const data = [
-    {
-      id: 1,
-      name: "Dr. Saraj Gupta",
-      email: "test121@gmail.com",
-      phone: "+13462127336",
-      status: "Active",
-      flag: "🇺🇸",
-    },
-    {
-      id: 2,
-      name: "Rahul Pundir",
-      email: "ghgh11@gmail.com",
-      phone: "+918396065885",
-      status: "Active",
-      flag: "🇮🇳",
-    },
-  ];
+const DataTable = ({
+  listName,
+  candidate,
+  onAddClick,
+  data,
+  loading,
+  error,
+}) => {
   const titleClass =
     candidate === "User"
       ? `${styles.title} ${styles.headerBar_user}`
@@ -38,42 +27,57 @@ const DataTable = ({ listName, candidate, onAddClick }) => {
         </button>
       </div>
       <div className={styles.tableContainer}>
-        <table className={styles.bondsmanTable}>
-          <thead>
-            <tr>
-              <th>Avatar</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((user) => (
-              <tr key={user.id}>
-                <td>👤</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  {user.flag} {user.phone}
-                </td>
-                <td>
-                  <span className={styles.statusActive}>{user.status}</span>
-                </td>
-                <td>
-                  <button className={`${styles.actionBtn} ${styles.editBtn}`}>
-                    Edit
-                  </button>{" "}
-                  <button className={`${styles.actionBtn} ${styles.deleteBtn}`}>
-                    Delete
-                  </button>
-                </td>
+        {loading && <p>Loading...</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {!loading && (
+          <table className={styles.bondsmanTable}>
+            <thead>
+              <tr>
+                <th>Avatar</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
+            </thead>
+            <tbody>
+              {data?.map((user) => (
+                <tr key={user._id}>
+                  <td>👤</td>
+                  <td>{`${user.firstName || user.name} ${
+                    user.middleName || " "
+                  } ${user.lastName || " "}`}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    {user.flag} {user.phoneNo}
+                  </td>
+                  <td>
+                    <span
+                      className={
+                        user?.isActive
+                          ? `${styles.statusActive}`
+                          : `${styles.statusNonActive}`
+                      }
+                    >
+                      {user.isActive ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td>
+                    <button className={`${styles.actionBtn} ${styles.editBtn}`}>
+                      Edit
+                    </button>{" "}
+                    <button
+                      className={`${styles.actionBtn} ${styles.deleteBtn}`}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
         {/* 🔁 For dynamic data:
           Replace 'data' array with API response:
           const [data, setData] = useState([]);

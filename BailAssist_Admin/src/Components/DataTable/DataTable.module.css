@@ -72,17 +72,26 @@
 }
 
 .editBtn {
+  font-family: "Times New Roman", Times, serif;
   background-color: #008000;
   color: white;
 }
 
 .deleteBtn {
+  font-family: "Times New Roman", Times, serif;
   background-color: #ff0000;
   color: white;
 }
 
 .statusActive {
   background-color: #008000;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.statusNonActive {
+  background-color: #ff0000;
   color: white;
   padding: 5px 10px;
   border-radius: 4px;
