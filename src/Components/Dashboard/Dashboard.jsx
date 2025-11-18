@@ -20,6 +20,8 @@ function Dashboard() {
     users: { totalUsers: 0 },
     userData: { allUsers: [] },
   });
+  const [searchText, setSearchText] = useState("");
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
@@ -31,6 +33,7 @@ function Dashboard() {
           axiosInstace.get("/api/v1/admin/getBondsmanDetails"),
           axiosInstace.get("/api/v1/admin/getTotalUsersCount"),
           axiosInstace.get("/api/v1/admin/getAllUsers"),
+          // /api/v1/bondsman/searchByPhoneNumber?search=prat
         ]);
 
         setResponse({

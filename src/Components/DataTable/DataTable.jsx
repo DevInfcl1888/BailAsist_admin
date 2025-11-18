@@ -45,12 +45,12 @@ const DataTable = ({
               {data?.map((user) => (
                 <tr key={user._id}>
                   <td>👤</td>
-                  <td>{`${user.firstName || user.name} ${
+                  <td>{`${user.firstName || user.name || " "} ${
                     user.middleName || " "
                   } ${user.lastName || " "}`}</td>
-                  <td>{user.email}</td>
+                  <td>{user.email || " "}</td>
                   <td>
-                    {user.flag} {user.phoneNo}
+                    {user.flag} {user.phoneNo || " "}
                   </td>
                   <td>
                     <span
@@ -78,11 +78,6 @@ const DataTable = ({
             </tbody>
           </table>
         )}
-        {/* 🔁 For dynamic data:
-          Replace 'data' array with API response:
-          const [data, setData] = useState([]);
-          useEffect(() => { fetch("/api/users").then(res=>res.json()).then(setData) }, []);
-      */}
       </div>
     </>
   );
