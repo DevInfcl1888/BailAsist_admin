@@ -4,7 +4,7 @@ import Sidebar from "../Sidebar/Sidebare";
 import profileImg from "../../Assets/profile_pic.jpg";
 import { useLocation } from "react-router-dom";
 
-const AddBondsmanForm = () => {
+const updateBondsmanForm = () => {
   const location = useLocation();
   const candidate = location.state?.candidate;
   return (
@@ -69,4 +69,4 @@ const AddBondsmanForm = () => {
   );
 };
 
-export default AddBondsmanForm;
+export default updateBondsmanForm;

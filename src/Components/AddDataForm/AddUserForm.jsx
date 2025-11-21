@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./AddUserTable.module.css";
+import styles from "./AddUserForm.module.css";
 import Sidebar from "../Sidebar/Sidebare";
 import profileImg from "../../Assets/profile_pic.jpg";
 import { useLocation } from "react-router-dom";

@@ -52,7 +52,10 @@ const DataTable = ({
     }
   }, [error]);
 
-  const handleDelete = async (id, e) => {
+  const handleEdit = async (id) => {
+    
+  }
+  const handleDelete = async (id) => {
     // e.preventDefault();
 
     settError(true);
@@ -151,6 +154,7 @@ const DataTable = ({
                     <td>
                       <button
                         className={`${styles.actionBtn} ${styles.editBtn}`}
+                        onClick={() => handleEdit(user._id)}
                       >
                         Edit
                       </button>
