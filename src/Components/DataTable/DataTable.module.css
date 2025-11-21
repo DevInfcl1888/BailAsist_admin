@@ -61,6 +61,7 @@
 
 /* ✅ Buttons */
 .actionBtn {
+  margin: 8px;
   border: none;
   border-radius: 4px;
   padding: 6px 12px;

@@ -1,10 +1,10 @@
 import React from "react";
-import styles from "./AddUserTable.module.css";
+import styles from "./AddBondsmanForm.module.css";
 import Sidebar from "../Sidebar/Sidebare";
 import profileImg from "../../Assets/profile_pic.jpg";
 import { useLocation } from "react-router-dom";
 
-const AddUser = () => {
+const AddBondsman = () => {
   const location = useLocation();
   const candidate = location.state?.candidate;
   return (
@@ -20,30 +20,44 @@ const AddUser = () => {
         <form className={styles.form}>
           <div className={styles.inputGroup}>
             <label>
-              Username<span>*</span>
+              Bondsman name<span>*</span>
             </label>
-            <input type="text" placeholder="Enter your Username" name="" />
+            <input type="text" placeholder="Enter Bondsman name" name="name" />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label>
+              Phone no<span>*</span>
+            </label>
+            <input type="tel" placeholder="Enter your Phone number" name="phoneNo" />
           </div>
 
           <div className={styles.inputGroup}>
             <label>
               Email<span>*</span>
             </label>
-            <input type="email" placeholder="Enter your Email" name="" />
+            <input type="email" placeholder="Enter your Email" name="email" />
           </div>
 
           <div className={styles.inputGroup}>
             <label>
-              Phone Number<span>*</span>
+              Password<span>*</span>
             </label>
-            <input type="tel" placeholder="Enter your Phone Number" name="" />
+            <input type="password" placeholder="Enter your Password" name="password" />
           </div>
 
           <div className={styles.inputGroup}>
             <label>
-              Status<span>*</span>
+              Country code <span>*</span>
             </label>
-            <input type="text" placeholder="Enter your Status" name="" />
+            <input type="text" placeholder="Enter your Country code" name="countryCode" />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label>
+              Address <span>*</span>
+            </label>
+            <input type="text" placeholder="Enter your Full address" name="address" />
           </div>
 
           <button type="submit" className={styles.saveBtn}>
@@ -55,4 +69,4 @@ const AddUser = () => {
   );
 };
 
-export default AddUser;
+export default AddBondsman;

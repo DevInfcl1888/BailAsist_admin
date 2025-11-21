@@ -8,62 +8,57 @@ import styles from "./Dashboard.module.css";
 import Sidebar from "../Sidebar/Sidebare";
 import DataTable from "../DataTable/DataTable";
 import Imglogo from "../../Assets/image.png";
-import AddUser from "../AddUserTable/AddUserTable";
-
+import AddUser from "../AddDataForm/AddUserTable";
+import NoData from "../CustomMessage/CustomMessage";
 function Dashboard() {
   const [showAddUser, setShowAddUser] = useState(false);
   const [currentType, setCurrentType] = useState("");
   const [showAddBondsman, setShowAddBondsman] = useState("");
   const [loading, setLoading] = useState(true);
-  const [response, setResponse] = useState({
-    bondsman: { listAllBondsman: [] },
-    users: { totalUsers: 0 },
-    userData: { allUsers: [] },
-  });
-  const [searchText, setSearchText] = useState("");
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({ allUsers: [] });
+  const [usersCount, setUsersCount] = useState({ totalUsers: 0 });
+  const [bondsman, setBondsman] = useState({ listAllBondsman: [] });
+  // const [searchText, setSearchText] = useState("");
+  // const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const [bondsmanRes, usersRes, usersData] = await Promise.all([
-          axiosInstace.get("/api/v1/admin/getBondsmanDetails"),
-          axiosInstace.get("/api/v1/admin/getTotalUsersCount"),
-          axiosInstace.get("/api/v1/admin/getAllUsers"),
-          // /api/v1/bondsman/searchByPhoneNumber?search=prat
-        ]);
 
-        setResponse({
-          bondsman: bondsmanRes,
-          users: usersRes,
-          userData: usersData,
-        });
-        setLoading(false);
-        // console.log(
-        //   "bondsmanRes?.data?.isBondsmanAllExist",
-        //   bondsmanRes?.data?.isBondsmanAllExist
-        // );
-      } catch (err) {
-        setError(
-          err?.response?.data?.message || err.message || "Something went wrong"
-        );
-        console.log(err);
-        console.log(err?.response?.data?.message);
-        console.log(err.message);
-      } finally {
-        setLoading(false);
-      }
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [bondsmanRes, usersRes, usersData] = await Promise.all([
+        axiosInstace.get("/api/v1/admin/getBondsmanDetails"),
+        axiosInstace.get("/api/v1/admin/getTotalUsersCount"),
+        axiosInstace.get("/api/v1/admin/getAllUsers"),
+      ]);
+
+      setUsers(usersData);
+      setUsersCount(usersRes);
+      setBondsman(bondsmanRes);
+      console.log("bondsmanRes", bondsmanRes);
+      console.log("usersRes", usersRes);
+      console.log("usersData", usersData);
+
+      setLoading(false);
+    } catch (err) {
+      setError(
+        err?.response?.data?.message || err.message || "Something went wrong"
+      );
+      console.log(err?.response?.data?.message);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
   const handleUserAddClick = (type) => {
     setCurrentType(type);
     setShowAddUser(true);
-    navigate("/AddUser", {
+    navigate(`/Add${type}`, {
       state: {
         candidate: type,
       },
@@ -73,7 +68,7 @@ function Dashboard() {
   const handleBondsmanAddClick = (type) => {
     setCurrentType(type);
     setShowAddBondsman(true);
-    navigate("/AddUser", {
+    navigate(`/Add${type}`, {
       state: {
         candidate: type,
       },
@@ -89,10 +84,13 @@ function Dashboard() {
           <div className={styles.buttonStyle}>
             <div className={styles.bondsmanCount}>
               Total Bondsman{" "}
-              {response.bondsman?.data?.isBondsmanAllExist.length}
+              {bondsman?.data?.message === "No bondsman found"
+                ? 0
+                : bondsman?.data?.isBondsmanAllExist?.length}
             </div>
             <div className={styles.userCount}>
-              Total User {response.users?.data?.count}
+              Total User{" "}
+              {usersCount?.data?.count === 0 ? 0 : usersCount?.data?.count}
             </div>
           </div>
           <div className={styles.adUpload}>
@@ -122,10 +120,12 @@ function Dashboard() {
           <DataTable
             candidate={"User"}
             listName="User List"
-            data={response?.userData?.data?.User}
+            data={users?.data?.User}
             error={error}
             loading={loading}
             onAddClick={() => handleUserAddClick("User")}
+            fetchData={fetchData}
+            deletAPI={"/api/v1/admin/deleteUserProfile"}
           />
         )
         // ✅ pass handler here
@@ -137,10 +137,12 @@ function Dashboard() {
         <DataTable
           candidate={"Bondsman"}
           listName="Bondsman User List"
-          data={response?.bondsman?.data?.isBondsmanAllExist}
+          data={bondsman?.data?.isBondsmanAllExist}
           error={error}
           loading={loading}
           onAddClick={() => handleBondsmanAddClick("Bondsman")} // ✅ pass handler here
+          fetchData={fetchData}
+          deletAPI={"/api/v1/admin/deleteBondsmanProfile"}
         />
       )}
     </>
