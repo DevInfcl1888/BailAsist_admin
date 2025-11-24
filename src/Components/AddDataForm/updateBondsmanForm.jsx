@@ -4,9 +4,10 @@ import Sidebar from "../Sidebar/Sidebare";
 import profileImg from "../../Assets/profile_pic.jpg";
 import { useLocation } from "react-router-dom";
 
-const updateBondsmanForm = () => {
+const UpdateBondsmanForm = () => {
   const location = useLocation();
   const candidate = location.state?.candidate;
+  const user = location.state?.bondsman
   return (
     <div className={styles.pageContainer}>
       <Sidebar />
@@ -69,4 +70,4 @@ const updateBondsmanForm = () => {
   );
 };
 
-export default updateBondsmanForm;
+export default UpdateBondsmanForm;

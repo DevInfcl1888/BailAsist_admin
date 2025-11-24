@@ -3,7 +3,7 @@ import styles from "./AdminLogin.module.css"; // 👈 CSS import
 import logo from "../../Assets/logo.png";
 import axiosInstace from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -18,22 +18,23 @@ function AdminLogin() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    Swal.fire({
+      title: "Loading...",
+      text: "Please wait",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     try {
-      const res = await axiosInstace.post(
-        `api/v1/admin/adminLogin`,
-        {
-          username,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axiosInstace.post(`api/v1/admin/adminLogin`, {
+        username,
+        password,
+      });
+      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.refreshToken);
       console.log("login success", res);
-      if (res.status === 200) {
-        alert("Login success");
-        navigate("/dashboard");
-      }
+      navigate("/dashboard");
     } catch (error) {
       if (error.response?.data.message) {
         setError(error.response?.data.message);
@@ -100,16 +101,15 @@ function AdminLogin() {
                   </span>
                 </div>
               </div>
-
-              {error && <p style={{ color: "red" }}>{error}</p>}
               <button type="submit" className={styles.button}>
-                {loading ? (
+                {/* {loading ? (
                   <div className={styles.loaderContainer}>
                     <div className={styles.loader}></div>
                   </div>
                 ) : (
                   "Submit"
-                )}
+                )} */}
+                Sumbit
               </button>
             </form>
           </div>

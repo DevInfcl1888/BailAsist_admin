@@ -4,6 +4,7 @@ import Dashboard from "./Components/Dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import AddUser from "./Components/AddDataForm/AddUserTable";
 import AddBondsman from "./Components/AddDataForm/AddBondsmanForm";
+import UpdateUser from "./Components/AddDataForm/updateUserForm";
 
 function App() {
   return (
@@ -19,8 +20,38 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/AddUser" element={<AddUser />} />
-          <Route path="/AddBondsman" element={<AddBondsman />} />
+          <Route
+            path="/AddUser"
+            element={
+              <ProtectedRoute>
+                <AddUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/AddBondsman"
+            element={
+              <ProtectedRoute>
+                <AddBondsman />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/UpdateUser"
+            element={
+              <ProtectedRoute>
+                <UpdateUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/UpdateBondsman"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </>

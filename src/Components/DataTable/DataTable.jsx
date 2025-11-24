@@ -4,6 +4,7 @@ import styles from "./DataTable.module.css";
 import NoData from "../CustomMessage/CustomMessage";
 import axiosInstace from "../../utils/axiosInstance";
 import { confirmDialog } from "../../utils/notificationToast";
+import { useNavigate } from "react-router-dom";
 
 const DataTable = ({
   listName,
@@ -17,6 +18,7 @@ const DataTable = ({
 }) => {
   const [loader, setLoader] = useState(false);
   const [errror, settError] = useState(false);
+  const navigate = useNavigate();
   const titleClass =
     candidate === "User"
       ? `${styles.title} ${styles.headerBar_user}`
@@ -52,9 +54,22 @@ const DataTable = ({
     }
   }, [error]);
 
-  const handleEdit = async (id) => {
-    
-  }
+  const handleEdit = (id) => {
+    const selectedItem = data.find((u) => u._id === id);
+
+    if (candidate === "User") {
+      navigate("/UpdateUser", {
+        state: { user: selectedItem, candidate: "User" },
+      });
+    }
+
+    if (candidate === "Bondsman") {
+      navigate("/UpdateBondsman", {
+        state: { bondsman: selectedItem, candidate: "Bondsman" },
+      });
+    }
+  };
+
   const handleDelete = async (id) => {
     // e.preventDefault();
 
@@ -78,9 +93,7 @@ const DataTable = ({
         },
       });
 
-      const res = await axiosInstace.delete(`${deletAPI}/${id}`, {
-        withCredentials: true,
-      });
+      const res = await axiosInstace.delete(`${deletAPI}/${id}`);
       await fetchData();
       Swal.fire("Deleted!", "User has been deleted.", "success");
 

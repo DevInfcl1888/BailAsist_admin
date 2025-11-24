@@ -1,23 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./AddUserForm.module.css";
 import Sidebar from "../Sidebar/Sidebare";
 import profileImg from "../../Assets/profile_pic.jpg";
 import { useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
+import axiosInstace from "../../utils/axiosInstance";
 
-const updateUserForm = () => {
+const UpdateUser = () => {
   const location = useLocation();
-  const candidate = location.state?.candidate;
+  const user = location.state?.user;
+  console.log("user", user);
+
+  const [formData, setFormData] = useState({
+    firstName: user?.firstName || "",
+    middleName: user?.middleName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    phoneNo: user?.phoneNo || "",
+    street: user?.street || "",
+    ZipCode: user?.ZipCode || "",
+    isActive: true,
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axiosInstace.put(
+        `/api/v1/bondsman/updateUserDetailsByBondsman/${user?._id}`,
+        // "/api/v1/user/updateUserDetails",
+        formData
+      );
+
+      Swal.fire("Success", "User updated successfully", "success");
+    } catch (error) {
+      Swal.fire(
+        "Error",
+        error.response?.data?.message || "Update failed",
+        "error"
+      );
+    }
+  };
   return (
     <div className={styles.pageContainer}>
       <Sidebar />
       <div className={styles.formContainer}>
-        <h2 className={styles.title}>Add {candidate}</h2>
-        <div className={styles.profileSection}>
+        <h2 className={styles.title}>Update user</h2>
+        {/* <div className={styles.profileSection}>
           <img src={profileImg} alt="Profile" className={styles.profileImg} />
           <button className={styles.editBtn}>✎</button>
-        </div>
+        </div> */}
 
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label>
               First name<span>*</span>
@@ -26,6 +64,8 @@ const updateUserForm = () => {
               type="text"
               placeholder="Enter your First name"
               name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
             />
           </div>
 
@@ -37,6 +77,8 @@ const updateUserForm = () => {
               type="text"
               placeholder="Enter your Middle name"
               name="middleName"
+              value={formData.middleName}
+              onChange={handleChange}
             />
           </div>
 
@@ -48,6 +90,8 @@ const updateUserForm = () => {
               type="text"
               placeholder="Enter your Last name"
               name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
             />
           </div>
 
@@ -55,28 +99,12 @@ const updateUserForm = () => {
             <label>
               Email<span>*</span>
             </label>
-            <input type="email" placeholder="Enter your Email" name="email" />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label>
-              Password<span>*</span>
-            </label>
             <input
-              type="password"
-              placeholder="Enter your Password"
-              name="password"
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label>
-              Confirm password<span>*</span>
-            </label>
-            <input
-              type="password"
-              placeholder="Enter your Confirm password"
-              name="confirmPassword"
+              type="email"
+              placeholder="Enter your Email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
 
@@ -88,17 +116,8 @@ const updateUserForm = () => {
               type="tel"
               placeholder="Enter your Phone number"
               name="phoneNo"
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label>
-              Home address<span>*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your Home address"
-              name="homeAddress"
+              value={formData.phoneNo}
+              onChange={handleChange}
             />
           </div>
 
@@ -110,17 +129,8 @@ const updateUserForm = () => {
               type="text"
               placeholder="Enter your Street name"
               name="street"
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label>
-              Country code<span>*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter your Country code"
-              name="countryCode"
+              value={formData.street}
+              onChange={handleChange}
             />
           </div>
 
@@ -132,6 +142,8 @@ const updateUserForm = () => {
               type="text"
               placeholder="Enter your ZipCode"
               name="ZipCode"
+              value={formData.ZipCode}
+              onChange={handleChange}
             />
           </div>
 
@@ -144,4 +156,4 @@ const updateUserForm = () => {
   );
 };
 
-export default updateUserForm;
+export default UpdateUser;

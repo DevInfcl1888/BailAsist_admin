@@ -7,6 +7,13 @@ import { useLocation } from "react-router-dom";
 const AddUser = () => {
   const location = useLocation();
   const candidate = location.state?.candidate;
+
+  const submitForm = (e)=>{
+    e.preventDefault();
+    
+    // api/v1/user/registration
+
+  }
   return (
     <div className={styles.pageContainer}>
       <Sidebar />
@@ -135,7 +142,7 @@ const AddUser = () => {
             />
           </div>
 
-          <button type="submit" className={styles.saveBtn}>
+          <button type="submit" className={styles.saveBtn} onClick={submitForm}>
             Save
           </button>
         </form>
