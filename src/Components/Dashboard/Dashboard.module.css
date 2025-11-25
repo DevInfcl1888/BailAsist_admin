@@ -190,19 +190,19 @@
   .dashboard {
     margin-left: 0;
     min-width: 100%;
-    padding: 0 12px;
+    padding: 0 4px;
   }
 
   .adUpload {
     width: 100%;
     margin: 18px 0;
-    padding: 18px 12px 26px 12px;
+    /* padding: 18px 12px 26px 12px; */
     box-shadow: 1px 1px 6px rgba(131, 131, 131, 0.25);
     border-radius: 8px;
   }
 
   .fileUpload {
-    width: 100%;
+    width: 90%;
     height: 160px;
   }
 
@@ -245,5 +245,24 @@
 
   .dashboard h1 {
     font-size: 18px;
+  }
+}
+/* For full dashboard pages */
+.pageWrapper {
+  margin-left: 230px;
+  padding: 20px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .pageWrapper {
+    margin-left: 200px;
+  }
+}
+
+/* Mobile → Sidebar becomes top, so no left margin */
+@media (max-width: 768px) {
+  .pageWrapper {
+    margin-left: 0;
   }
 }

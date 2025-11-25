@@ -76,75 +76,77 @@ function Dashboard() {
   };
   return (
     <>
-      <div className={styles.leftSideBar}>
-        <Sidebar />
-        <div className={styles.dashboard}>
-          <h1>Admin Dashboard</h1>
+      {/* <div className={styles.pageWrapper}> */}
+        <div className={styles.leftSideBar}>
+          <Sidebar />
+          <div className={styles.dashboard}>
+            <h1>Admin Dashboard</h1>
 
-          <div className={styles.buttonStyle}>
-            <div className={styles.bondsmanCount}>
-              Total Bondsman{" "}
-              {bondsman?.data?.message === "No bondsman found"
-                ? 0
-                : bondsman?.data?.isBondsmanAllExist?.length}
-            </div>
-            <div className={styles.userCount}>
-              Total User{" "}
-              {usersCount?.data?.count === 0 ? 0 : usersCount?.data?.count}
-            </div>
-          </div>
-          <div className={styles.adUpload}>
-            <h2>Advertising</h2>
-
-            <div className={styles.fileUpload}>
-              <div className={styles.uploadText}>
-                <img src={Imglogo} alt="" height={"60px"} />
-                <h3>Drag & Drop</h3>
-                <p>or select files from device</p>
-                <span>max. 50MB</span>
+            <div className={styles.buttonStyle}>
+              <div className={styles.bondsmanCount}>
+                Total Bondsman{" "}
+                {bondsman?.data?.message === "No bondsman found"
+                  ? 0
+                  : bondsman?.data?.isBondsmanAllExist?.length}
+              </div>
+              <div className={styles.userCount}>
+                Total User{" "}
+                {usersCount?.data?.count === 0 ? 0 : usersCount?.data?.count}
               </div>
             </div>
+            <div className={styles.adUpload}>
+              <h2>Advertising</h2>
 
-            {/* {error && <p style={{ color: "red" }}>Error: {error}</p>} */}
-            <div className={styles.fileInfo}>
-              <p>📝 my.pdf &nbsp; 60 KB of 120 KB •</p>
-              <span className={styles.status}>✔ Completed</span>
+              <div className={styles.fileUpload}>
+                <div className={styles.uploadText}>
+                  <img src={Imglogo} alt="" height={"60px"} />
+                  <h3>Drag & Drop</h3>
+                  <p>or select files from device</p>
+                  <span>max. 50MB</span>
+                </div>
+              </div>
+
+              {/* {error && <p style={{ color: "red" }}>Error: {error}</p>} */}
+              <div className={styles.fileInfo}>
+                <p>📝 my.pdf &nbsp; 60 KB of 120 KB •</p>
+                <span className={styles.status}>✔ Completed</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {
-        showAddUser ? (
+        {
+          showAddUser ? (
+            <AddUser candidate={currentType} />
+          ) : (
+            <DataTable
+              candidate={"User"}
+              listName="User List"
+              data={users?.data?.User}
+              error={error}
+              loading={loading}
+              onAddClick={() => handleUserAddClick("User")}
+              fetchData={fetchData}
+              deletAPI={"/api/v1/admin/deleteUserProfile"}
+            />
+          )
+          // ✅ pass handler here
+        }
+
+        {showAddBondsman ? (
           <AddUser candidate={currentType} />
         ) : (
           <DataTable
-            candidate={"User"}
-            listName="User List"
-            data={users?.data?.User}
+            candidate={"Bondsman"}
+            listName="Bondsman User List"
+            data={bondsman?.data?.isBondsmanAllExist}
             error={error}
             loading={loading}
-            onAddClick={() => handleUserAddClick("User")}
+            onAddClick={() => handleBondsmanAddClick("Bondsman")} // ✅ pass handler here
             fetchData={fetchData}
-            deletAPI={"/api/v1/admin/deleteUserProfile"}
+            deletAPI={"/api/v1/admin/deleteBondsmanProfile"}
           />
-        )
-        // ✅ pass handler here
-      }
-
-      {showAddBondsman ? (
-        <AddUser candidate={currentType} />
-      ) : (
-        <DataTable
-          candidate={"Bondsman"}
-          listName="Bondsman User List"
-          data={bondsman?.data?.isBondsmanAllExist}
-          error={error}
-          loading={loading}
-          onAddClick={() => handleBondsmanAddClick("Bondsman")} // ✅ pass handler here
-          fetchData={fetchData}
-          deletAPI={"/api/v1/admin/deleteBondsmanProfile"}
-        />
-      )}
+        )}
+      {/* </div> */}
     </>
   );
 }

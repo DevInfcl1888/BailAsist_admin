@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 const DataTable = ({
   listName,
   candidate,
-  onAddClick,
   data,
   loading,
   error,
@@ -115,9 +114,6 @@ const DataTable = ({
         <div className={styles.searchBox}>
           <input placeholder="Search by Name, Phone No" />
         </div>
-        <button className={styles.addBtn} onClick={onAddClick}>
-          ✚ Add {candidate}
-        </button>
       </div>
 
       <div className={styles.tableContainer}>
@@ -149,7 +145,8 @@ const DataTable = ({
 
                     <td>{user.email || " "}</td>
                     <td>
-                      {user.flag} {user.phoneNo}
+                      {user.flag} {user.countryCode}
+                      {user.phoneNo}
                     </td>
 
                     <td>
@@ -186,6 +183,7 @@ const DataTable = ({
           )
         )}
       </div>
+      {/* </div> */}
     </>
   );
 };

@@ -5,7 +5,7 @@ import LogoutButton from "../LogoutButton/LogoutButton";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstace from "../../utils/axiosInstance";
-import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const Sidebar = () => {
   const [error, setError] = useState("");
@@ -14,12 +14,16 @@ const Sidebar = () => {
   const handleLogout = async (e) => {
     e.preventDefault();
     setLoader(true);
+    Swal.fire({
+      title: "Logout...",
+      text: "Please wait",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     try {
-      const res = await axiosInstace.post(
-        "/api/v1/admin/adminLogout",
-        {},
-        { withCredentials: true }
-      );
+      const res = await axiosInstace.post("/api/v1/admin/adminLogout", {});
       console.log("res", res);
       if (res.status === 200) {
         setLoader(false);
@@ -35,11 +39,9 @@ const Sidebar = () => {
     <>
       <div className={styles.divImg}>
         <img src={logo} height={"180px"} alt="" />
-        <button className={styles.btnStyle}>Admin Panel</button>
+        {/* <button className={styles.btnStyle}>Admin Panel</button> */}
         <LogoutButton onLogout={handleLogout} />
-        <p style={{color:"red"}}>
-          {error?.response?.data.message}
-        </p>
+        <p style={{ color: "red" }}>{error?.response?.data.message}</p>
       </div>
     </>
   );

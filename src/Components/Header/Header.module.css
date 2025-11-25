@@ -1,101 +1,84 @@
+/* ================= HEADER ONLY ================= */
 
-/* Title section */
-.title {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0;
-  color: #111;
+/* MAIN WRAPPER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  gap: 15px;
+  position: relative;
+  z-index: 10;
 }
 
-/* Search + Add button container */
-.rightSide {
+/* TITLE */
+.title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffa4a4;
+  margin: 0;
+}
+
+/* RIGHT AREA */
+.rightArea {
   display: flex;
-  align-items: end;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-.searchBox input {
-  padding: 8px 12px;
-  border-radius: 6px;
+/* SEARCH INPUT */
+.search {
+  padding: 9px 12px;
+  width: 230px;
   border: 1px solid #ccc;
-  outline: none;
-  width: 220px;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: 0.3s ease;
 }
 
-.searchBox input:focus {
+.search:focus {
   border-color: #0056ff;
-  box-shadow: 0 0 3px #0056ff;
+  box-shadow: 0 0 4px rgba(0, 86, 255, 0.4);
+  outline: none;
 }
 
-/* Add Button */
+/* -------- Responsive -------- */
 
-.addBtn {
-  background-color: #0056ff;
-  margin-left: 139px;
-  margin-right: 50px;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 14px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-.addBtn:hover {
-  background-color: #0041d8;
-  transform: translateY(-1px);
-}
-
-/* ✅ RESPONSIVE DESIGN */
-
-/* Tablet (≤1024px) */
-@media (max-width: 1024px) {
+/* Tablet */
+@media (max-width: 900px) {
   .title {
-    font-size: 26px;
+    font-size: 22px;
   }
-  .searchBox input {
-    width: 200px;
+  .search {
+    width: 190px;
   }
 }
 
-/* Mobile (≤768px) */
-@media (max-width: 768px) {
-  .headerBar {
+/* Mobile */
+@media (max-width: 600px) {
+  .header {
     flex-direction: column;
-    align-items: stretch;
-    text-align: center;
+    align-items: flex-start;
   }
 
-  .title {
-    font-size: 24px;
-    margin-bottom: 8px;
-  }
-
-  .rightSide {
-    flex-direction: column;
+  .rightArea {
     width: 100%;
+    flex-direction: column;
     align-items: stretch;
   }
 
-  .searchBox input,
-  .addBtn {
+  .search {
     width: 100%;
   }
 }
 
-/* Extra small (≤420px) */
-@media (max-width: 420px) {
+/* Extra small */
+@media (max-width: 400px) {
   .title {
     font-size: 20px;
-  }
-  .searchBox input {
-    font-size: 14px;
-    padding: 8px 10px;
-  }
-  .addBtn {
-    font-size: 14px;
-    padding: 9px 10px;
   }
 }

@@ -157,3 +157,22 @@
     font-size: 14px;
   }
 }
+/* For full dashboard pages */
+.pageWrapper {
+  margin-left: 230px;
+  padding: 20px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .pageWrapper {
+    margin-left: 200px;
+  }
+}
+
+/* Mobile → Sidebar becomes top, so no left margin */
+@media (max-width: 768px) {
+  .pageWrapper {
+    margin-left: 0;
+  }
+}
