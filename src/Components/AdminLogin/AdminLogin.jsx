@@ -39,6 +39,15 @@ function AdminLogin() {
       if (error.response?.data.message) {
         setError(error.response?.data.message);
         setLoading(false);
+        if (!loading) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `${error.response?.data.message}`,
+          });
+        } else {
+          Swal.close();
+        }
       } else {
         setError("Something went wrong. Please try again.");
         setLoading(false);

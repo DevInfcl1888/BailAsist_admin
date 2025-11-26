@@ -9,7 +9,9 @@ import Sidebar from "../Sidebar/Sidebare";
 import DataTable from "../DataTable/DataTable";
 import Imglogo from "../../Assets/image.png";
 import AddUser from "../AddDataForm/AddUserTable";
-import NoData from "../CustomMessage/CustomMessage";
+import Swal from "sweetalert2";
+import Button from "../Button/Button";
+
 function Dashboard() {
   const [showAddUser, setShowAddUser] = useState(false);
   const [currentType, setCurrentType] = useState("");
@@ -18,6 +20,8 @@ function Dashboard() {
   const [users, setUsers] = useState({ allUsers: [] });
   const [usersCount, setUsersCount] = useState({ totalUsers: 0 });
   const [bondsman, setBondsman] = useState({ listAllBondsman: [] });
+  const [activeScreen, setActiveScreen] = useState("Users");
+
   // const [searchText, setSearchText] = useState("");
   // const [users, setUsers] = useState([]);
   const navigate = useNavigate();
@@ -27,6 +31,14 @@ function Dashboard() {
   const fetchData = async () => {
     try {
       setLoading(true);
+      Swal.fire({
+        title: "Loading...",
+        text: "Please wait",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const [bondsmanRes, usersRes, usersData] = await Promise.all([
         axiosInstace.get("/api/v1/admin/getBondsmanDetails"),
         axiosInstace.get("/api/v1/admin/getTotalUsersCount"),
@@ -41,6 +53,7 @@ function Dashboard() {
       console.log("usersData", usersData);
 
       setLoading(false);
+      Swal.close();
     } catch (err) {
       setError(
         err?.response?.data?.message || err.message || "Something went wrong"
@@ -74,78 +87,117 @@ function Dashboard() {
       },
     });
   };
+
+  // const userHandleClick = () => {
+  //   setActiveScreen("Users");
+  // };
+
+  // const bondsmanHandleClick = () => {
+  //   setActiveScreen("Bondsman");
+  // };
+
+  // {
+  //   activeScreen === "Users" && (
+  //     <DataTable
+  //       candidate={"User"}
+  //       listName="User List"
+  //       data={users?.data?.User}
+  //       error={error}
+  //       loading={loading}
+  //       onAddClick={() => handleUserAddClick("User")}
+  //       fetchData={fetchData}
+  //       deletAPI={"/api/v1/admin/deleteUserProfile"}
+  //     />
+  //   );
+  // }
+
+  // {
+  //   activeScreen === "Bondsman" && (
+  //     <DataTable
+  //       candidate={"Bondsman"}
+  //       listName="Bondsman User List"
+  //       data={bondsman?.data?.isBondsmanAllExist}
+  //       error={error}
+  //       loading={loading}
+  //       onAddClick={() => handleBondsmanAddClick("Bondsman")} // ✅ pass handler here
+  //       fetchData={fetchData}
+  //       deletAPI={"/api/v1/admin/deleteBondsmanProfile"}
+  //     />
+  //   );
+  // }
   return (
     <>
       {/* <div className={styles.pageWrapper}> */}
-        <div className={styles.leftSideBar}>
-          <Sidebar />
-          <div className={styles.dashboard}>
-            <h1>Admin Dashboard</h1>
+      <div className={styles.leftSideBar}>
+        <Sidebar />
+        <div className={styles.dashboard}>
+          <h1>Admin Dashboard</h1>
 
-            <div className={styles.buttonStyle}>
-              <div className={styles.bondsmanCount}>
-                Total Bondsman{" "}
-                {bondsman?.data?.message === "No bondsman found"
-                  ? 0
-                  : bondsman?.data?.isBondsmanAllExist?.length}
-              </div>
-              <div className={styles.userCount}>
-                Total User{" "}
-                {usersCount?.data?.count === 0 ? 0 : usersCount?.data?.count}
+          <div className={styles.buttonStyle}>
+            <div className={styles.bondsmanCount}>
+              Total Bondsman{" "}
+              {bondsman?.data?.message === "No bondsman found"
+                ? 0
+                : bondsman?.data?.isBondsmanAllExist?.length}
+            </div>
+            <div className={styles.userCount}>
+              Total User{" "}
+              {usersCount?.data?.count === 0 ? 0 : usersCount?.data?.count}
+            </div>
+          </div>
+          <div className={styles.adUpload}>
+            <h2>Advertising</h2>
+
+            <div className={styles.fileUpload}>
+              <div className={styles.uploadText}>
+                <img src={Imglogo} alt="" height={"60px"} />
+                <h3>Drag & Drop</h3>
+                <p>or select files from device</p>
+                <span>max. 50MB</span>
               </div>
             </div>
-            <div className={styles.adUpload}>
-              <h2>Advertising</h2>
 
-              <div className={styles.fileUpload}>
-                <div className={styles.uploadText}>
-                  <img src={Imglogo} alt="" height={"60px"} />
-                  <h3>Drag & Drop</h3>
-                  <p>or select files from device</p>
-                  <span>max. 50MB</span>
-                </div>
-              </div>
-
-              {/* {error && <p style={{ color: "red" }}>Error: {error}</p>} */}
-              <div className={styles.fileInfo}>
-                <p>📝 my.pdf &nbsp; 60 KB of 120 KB •</p>
-                <span className={styles.status}>✔ Completed</span>
-              </div>
+            {/* {error && <p style={{ color: "red" }}>Error: {error}</p>} */}
+            <div className={styles.fileInfo}>
+              <p>📝 my.pdf &nbsp; 60 KB of 120 KB •</p>
+              <span className={styles.status}>✔ Completed</span>
             </div>
           </div>
         </div>
-        {
-          showAddUser ? (
-            <AddUser candidate={currentType} />
-          ) : (
-            <DataTable
-              candidate={"User"}
-              listName="User List"
-              data={users?.data?.User}
-              error={error}
-              loading={loading}
-              onAddClick={() => handleUserAddClick("User")}
-              fetchData={fetchData}
-              deletAPI={"/api/v1/admin/deleteUserProfile"}
-            />
-          )
-          // ✅ pass handler here
-        }
-
-        {showAddBondsman ? (
+      </div>
+      {
+        showAddUser ? (
           <AddUser candidate={currentType} />
         ) : (
           <DataTable
-            candidate={"Bondsman"}
-            listName="Bondsman User List"
-            data={bondsman?.data?.isBondsmanAllExist}
+            candidate={"User"}
+            listName="User List"
+            data={users?.data?.User}
             error={error}
             loading={loading}
-            onAddClick={() => handleBondsmanAddClick("Bondsman")} // ✅ pass handler here
+            onAddClick={() => handleUserAddClick("User")}
             fetchData={fetchData}
-            deletAPI={"/api/v1/admin/deleteBondsmanProfile"}
+            deletAPI={"/api/v1/admin/deleteUserProfile"}
           />
-        )}
+        )
+        // ✅ pass handler here
+      }
+
+      {showAddBondsman ? (
+        <AddUser candidate={currentType} />
+      ) : (
+        <DataTable
+          candidate={"Bondsman"}
+          listName="Bondsman User List"
+          data={bondsman?.data?.isBondsmanAllExist}
+          error={error}
+          loading={loading}
+          onAddClick={() => handleBondsmanAddClick("Bondsman")} // ✅ pass handler here
+          fetchData={fetchData}
+          deletAPI={"/api/v1/admin/deleteBondsmanProfile"}
+        />
+      )}
+
       {/* </div> */}
     </>
   );

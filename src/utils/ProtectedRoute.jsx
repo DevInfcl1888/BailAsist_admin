@@ -26,9 +26,12 @@ function ProtectedRoute({ children }) {
     const checkAuth = async () => {
       try {
         setLoading(true);
-        const res = await axiosInstace.get("/api/v1/admin/verifyToken", {
-        });
-        setIsAuthenticate(res?.data?.authenticated);
+        const res = await axiosInstace.get("/api/v1/admin/verifyToken");
+        if (!res.data.authenticated) {
+          setIsAuthenticate(false);
+          return;
+        }
+        setIsAuthenticate(true);
       } catch (error) {
         setIsAuthenticate(false);
       } finally {

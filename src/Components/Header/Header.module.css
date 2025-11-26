@@ -33,6 +33,7 @@
 /* SEARCH INPUT */
 .search {
   padding: 9px 12px;
+  color: white;
   width: 230px;
   border: 1px solid #ccc;
   border-radius: 8px;

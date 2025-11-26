@@ -1,69 +1,103 @@
-/* ================= TABLE & ACTIONS ONLY ================= */
-.tableContainer {
-  margin: 10px 0px 35px 244px;
+/* MASTER WRAPPER — Keeps consistent spacing */
+.pageWrapper {
+  margin-left: 220px; /* Sidebar gap */
   padding: 20px;
-  width: calc(100% - 256px);
-  box-sizing: border-box;
-  overflow-x: auto;
-  border: 0.5px solid rgba(0, 0, 0, 0.288);
-  border-radius: 5px;
+  transition: 0.3s ease;
 }
 
-/* Responsive - for tablets */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .tableContainer {
+/* Tablet */
+@media (max-width: 1024px) {
+  .pageWrapper {
     margin-left: 200px;
-    width: calc(100% - 200px);
   }
 }
 
-/* Mobile screens */
-@media (max-width: 767px) {
+/* Mobile — sidebar moves up so no left margin */
+@media (max-width: 768px) {
+  .pageWrapper {
+    margin-left: 0;
+    padding: 15px;
+  }
+}
+/* ================= TABLE WRAPPER ================= */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.tableContainer::-webkit-scrollbar {
+  height: 6px;
+}
+
+.bondsmanTable {
+  width: 100%;
+  /* min-width: 550px; */
+  border-collapse: collapse;
+}
+
+/* Tablet responsiveness */
+@media (max-width: 1024px) {
+  .tableContainer {
+    margin-left: 180px;
+    width: calc(100% - 180px);
+  }
+}
+
+/* Mobile - sidebar above so no left margin */
+@media (max-width: 768px) {
   .tableContainer {
     margin-left: 0;
     width: 100%;
-    padding: 10px;
+    padding: 12px;
   }
 }
 
-/* Bondsman table */
-.bondsmanTable {
+/* TABLE STYLE */
+/* .bondsmanTable {
   width: 100%;
-  background-color: white;
-  justify-content: space-evenly;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 600px; /* important for scroll on mobile *
+} 
+*/
 
+/* Table header */
 .bondsmanTable th {
   background-color: #f1f1f1;
   text-align: left;
-  padding: 12px 16px;
+  /* padding: 12px 16px; */
   font-weight: 600;
+  white-space: nowrap;
 }
 
+/* Table rows */
 .bondsmanTable td {
   padding: 12px 16px;
   border-top: 1px solid #eee;
   vertical-align: middle;
 }
 
+/* Hover effect */
 .bondsmanTable tr:hover {
   background-color: #f9f9f9;
 }
 
 /* Buttons */
 .actionBtn {
-  margin: 8px;
+  margin: 6px;
   border: none;
   border-radius: 4px;
-  padding: 6px 12px;
+  padding: 6px 8px;
   cursor: pointer;
-  margin-top: 10px;
+  flex-direction: row;
   font-size: 14px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: 0.2s ease;
 }
 
 .editBtn {
@@ -76,30 +110,29 @@
   color: white;
 }
 
-.statusActive {
-  background-color: #008000;
-  color: white;
+.statusActive,
+.statusNonActive {
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 13px;
+  color: white;
+}
+
+.statusActive {
+  background-color: #008000;
 }
 
 .statusNonActive {
   background-color: #ff0000;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 13px;
 }
 
-/* Header Bar */
+/* ---------------- HEADER BAR ---------------- */
 .headerBar {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
-
 .searchBox {
   display: flex;
   align-items: center;
@@ -108,38 +141,67 @@
   color: white;
   padding: 8px 12px;
   border-radius: 6px;
-  margin-right: 12px;
 }
 
 .searchBox input {
   border: none;
   outline: none;
   padding: 6px 8px;
-  background-color: #000cff;
+  background-color: transparent;
   color: white;
-  border-radius: 4px;
   font-size: 15px;
 }
 
-input::placeholder {
-  color: white;
+/* Tablet header */
+@media (max-width: 1024px) {
+  .headerBar {
+    margin-left: 180px;
+  }
 }
 
-/* Responsive */
-@media (max-width: 600px) {
+/* Mobile header collapses */
+@media (max-width: 768px) {
   .headerBar {
     flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
+    gap: 12px;
   }
 
   .searchBox {
-    width: 75%;
+    width: 100%;
   }
 
   .bondsmanTable th,
   .bondsmanTable td {
-    font-size: 13px;
     padding: 8px 10px;
+    font-size: 13px;
   }
+}
+/* Pagination */
+.pagination {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s ease;
+}
+
+.pagination button:hover {
+  background: #dbdbdb;
+}
+
+.activePage::before {
+  border-bottom: #000cff;
+}
+.activePage {
+  font-weight: bolder;
+  /* background: #000cff; */
+  /* border-color: #000cff; */
 }

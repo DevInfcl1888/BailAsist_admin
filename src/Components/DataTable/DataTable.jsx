@@ -17,6 +17,8 @@ const DataTable = ({
 }) => {
   const [loader, setLoader] = useState(false);
   const [errror, settError] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(5); // rows per page
   const navigate = useNavigate();
   const titleClass =
     candidate === "User"
@@ -24,6 +26,10 @@ const DataTable = ({
       : `${styles.title} ${styles.headerBar_bondsman}`;
   const capitalizeFirst = (str = "") =>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+  const startIndex = (page - 1) * limit;
+  const currentPageData = data?.slice(startIndex, startIndex + limit) || [];
+  const totalPages = Math.ceil((data?.length || 0) / limit);
 
   useEffect(() => {
     if (loading) {
@@ -108,7 +114,7 @@ const DataTable = ({
     }
   };
   return (
-    <>
+    <div className={styles.pageWrapper}>
       <div className={styles.headerBar}>
         <h2 className={titleClass}>{listName}</h2>
         <div className={styles.searchBox}>
@@ -134,7 +140,7 @@ const DataTable = ({
               </thead>
 
               <tbody>
-                {data?.map((user) => (
+                {currentPageData?.map((user) => (
                   <tr key={user._id}>
                     <td>👤</td>
                     <td>{`${
@@ -183,8 +189,32 @@ const DataTable = ({
           )
         )}
       </div>
-      {/* </div> */}
-    </>
+      {/* ---------------- PAGINATION UI ---------------- */}
+      {data?.length > 0 && (
+        <div className={styles.pagination}>
+          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+            Prev
+          </button>
+
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              className={page === i + 1 ? styles.activePage : ""}
+              onClick={() => setPage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 

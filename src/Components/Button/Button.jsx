@@ -1,39 +1,46 @@
 import React from "react";
-import styles from "./LogoutButton.module.css";
+import styles from "./Button.module.css";
 import { UserIcon } from "lucide-react";
 import { LogOut } from "lucide-react";
 import { Phone } from "lucide-react";
 import { ShieldPlusIcon } from "lucide-react";
-import { ShieldPlus } from "lucide-react";
-import { ContactIcon } from "lucide-react";
-import { ContactRound } from "lucide-react";
-import { ContactRoundIcon } from "lucide-react";
 
-const LogoutButton = ({ onLogout }) => {
+const Button = ({
+  onUserClick,
+  onBondsmanClick,
+  onPrivacyClick,
+  onPhoneClick,
+  onLogout,
+}) => {
   return (
     <>
-      <button className={styles.btnStyle} onClick={onLogout}>
+      <button className={styles.btnStyle} onClick={onUserClick}>
         <UserIcon size={19} className={styles.icon} />
+        &nbsp;&nbsp;
         <span>User</span>
       </button>
-      <button className={styles.btnStyle} onClick={onLogout}>
+      <button className={styles.btnStyle} onClick={onBondsmanClick}>
         <UserIcon size={18} className={styles.icon} />
+        &nbsp;&nbsp;
         <span>Bondsman</span>
       </button>
-      <button className={styles.btnStyle} onClick={onLogout}>
+      <button className={styles.btnStyle} onClick={onPrivacyClick}>
         <ShieldPlusIcon size={18} className={styles.icon} />
-        <span>ShieldPlusIcon</span>
+        &nbsp;&nbsp;
+        <span>Privacy</span>
       </button>
-      <button className={styles.btnStyle} onClick={onLogout}>
+      <button className={styles.btnStyle} onClick={onPhoneClick}>
         <Phone size={18} className={styles.icon} />
+        &nbsp;&nbsp;
         <span>Phone</span>
       </button>
       <button className={styles.btnStyle} onClick={onLogout}>
         <LogOut size={18} className={styles.icon} />
+        &nbsp;&nbsp;
         <span>Logout</span>
       </button>
     </>
   );
 };
 
-export default LogoutButton;
+export default Button;

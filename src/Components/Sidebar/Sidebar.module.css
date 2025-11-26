@@ -1,8 +1,9 @@
+/* ----- SIDEBAR (LEFT FIXED ON DESKTOP) ----- */
 .divImg {
   position: fixed;
   top: 0;
   left: 0;
-  width: 200px;
+  width: 220px;
   height: 100vh;
   background-color: #ffff00;
   display: flex;
@@ -10,24 +11,22 @@
   align-items: center;
   padding-top: 20px;
   gap: 20px;
-  z-index: 500;
-  overflow-y: auto;
+  z-index: 1000;
 }
 
-/* Tablet */
-/* @media (max-width: 1024px) {
+/* Tablet - keep slightly smaller */
+@media (max-width: 1024px) {
   .divImg {
     width: 200px;
   }
-} */
+}
 
-/* Mobile — sidebar moves to TOP */
+/* Mobile - sidebar goes TOP */
 @media (max-width: 768px) {
   .divImg {
     position: relative;
     width: 100%;
     height: auto;
-    flex-direction: column;
     padding: 20px 0;
   }
 }
