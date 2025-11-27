@@ -115,14 +115,17 @@ const DataTable = ({
   };
   return (
     <div className={styles.pageWrapper}>
-      <div className={styles.headerBar}>
-        <h2 className={titleClass}>{listName}</h2>
-        <div className={styles.searchBox}>
-          <input placeholder="Search by Name, Phone No" />
-        </div>
-      </div>
+      
 
       <div className={styles.tableContainer}>
+        <div className={styles.headerBar}>
+        <h2 className={titleClass}>{listName}</h2>
+        <div className={styles.searchBox}>
+  <span className={styles.searchIcon}><img src="/New-search.png" style={{height:"18px" , width:"18px"}} /></span>
+  <input placeholder="Search by Name, Phone No..." />
+</div>
+
+      </div>
         {!loading && (!data || data.length === 0) ? (
           <NoData message={`No ${candidate} Found`} />
         ) : (
@@ -142,7 +145,7 @@ const DataTable = ({
               <tbody>
                 {currentPageData?.map((user) => (
                   <tr key={user._id}>
-                    <td>👤</td>
+                    <td><img src="/table-profile.png" style={{height:"39px" , width:"39px"}}/></td>
                     <td>{`${
                       capitalizeFirst(user.firstName || user.name) || " "
                     } ${capitalizeFirst(user.middleName) || " "} ${
@@ -184,13 +187,30 @@ const DataTable = ({
                     </td>
                   </tr>
                 ))}
+
               </tbody>
             </table>
           )
         )}
+          {data?.length > 0 && (
+        <div className={styles.pagination}>
+          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+            Prev
+          </button>
+
+         
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
       </div>
       {/* ---------------- PAGINATION UI ---------------- */}
-      {data?.length > 0 && (
+      {/* {data?.length > 0 && (
         <div className={styles.pagination}>
           <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
             Prev
@@ -213,7 +233,7 @@ const DataTable = ({
             Next
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: [
-      "cathy-retributive-osmotically.ngrok-free.dev", // <-- ADD THIS
+      "aa1ea70bfae2.ngrok-free.app",
     ],
   },
 });

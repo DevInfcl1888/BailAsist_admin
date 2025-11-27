@@ -1,100 +1,135 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import styles from "./AddUserForm.module.css";
 import Sidebar from "../Sidebar/Sidebare";
-import profileImg from "../../Assets/profile_pic.jpg";
-import { useLocation } from "react-router-dom";
-import axiosInstace from "../../utils/axiosInstance";
-import { useState } from "react";
-import Swal from "sweetalert2";
 
-const UpdateBondsmanForm = () => {
-  const location = useLocation();
-  const candidate = location.state?.candidate;
-  const bondsman = location.state?.bondsman;
+const UpdateBondsman = () => {
+  const [profileImage, setProfileImage] = useState(null);
+  const [profilePreview, setProfilePreview] = useState(null);
+  const [isSideOpen, setIsSideOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: bondsman?.name || "",
-    email: bondsman?.email || "",
-    phoneNo: bondsman?.phoneNo || "",
+    name: "",
+    phone: "",
+    email: "",
+    cellPhone: ""
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const isFormValid =
+    formData.name.trim() !== "" &&
+    formData.phone.trim() !== "" &&
+    formData.email.trim() !== "" &&
+    formData.cellPhone.trim() !== "";
 
-    try {
-      const res = await axiosInstace.post(
-        `/api/v1/admin/updateBondsmanDetails/${bondsman?._id}`,
-        formData
-      );
-      Swal.fire("Success", "Bondsman updated successfully", "success");
-    } catch (error) {
-      console.log(error);
-      Swal.fire(
-        "Error",
-        error.response?.data?.message || "Update failed",
-        "error"
-      );
+  const fileInputRef = useRef(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
+
   return (
-    <div className={styles.pageContainer}>
+    <div className={styles.pageWrapper}>
       <Sidebar />
-      <div className={styles.formContainer}>
-        <h2 className={styles.title}>Add {candidate}</h2>
-        <div className={styles.profileSection}>
-          <img src={profileImg} alt="Profile" className={styles.profileImg} />
-          <button className={styles.editBtn}>✎</button>
+
+      <h2 className={styles.title}>Update Bondsman Info</h2>
+
+      <div className={styles.profileSection}>
+        <div className={styles.profileImageContainer}>
+          <div className={styles.profileImageWrapper}>
+            <img
+              src={profilePreview || "/boy.png"}
+              alt="Profile"
+              className={styles.profileImage}
+            />
+          </div>
+
+          <div
+            className={styles.editIcon}
+            onClick={() => fileInputRef.current.click()}
+          >
+            <img src="/img-pen.png" style={{ width: "14px", height: "14px" }} />
+          </div>
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+            accept="image/*"
+            className={styles.fileInput}
+            
+          />
+        </div>
+      </div>
+
+      <form className={styles.formWrapper}>
+        <div className={styles.formGroup}>
+          <label>Full Name <span className="required">*</span></label>
+          <input
+            type="text"
+            placeholder="Enter Name"
+            name="name"
+            onChange={handleInputChange}
+                              className="form-input"
+
+          />
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputGroup}>
-            <label>
-              Bondsman name<span>*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter Bondsman name"
-              name="name"
-              onChange={handleChange}
-              value={formData?.name}
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label>
-              Email<span>*</span>
-            </label>
-            <input
-              type="email"
-              placeholder="Enter your Email"
-              name="email"
-              onChange={handleChange}
-              value={formData?.email}
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label>
-              Phone no<span>*</span>
-            </label>
-            <input
-              type="tel"
-              placeholder="Enter your Phone number"
-              name="phoneNo"
-              onChange={handleChange}
-              value={formData?.phoneNo}
-            />
-          </div>
+        <div className={styles.formGroup}>
+          <label>Phone Number<span className="required">*</span></label>
+          <input
+            type="text"
+            placeholder="Enter Phone"
+            name="phone"
+            onChange={handleInputChange}
+                              className="form-input"
 
-          <button type="submit" className={styles.saveBtn}>
-            Save
-          </button>
-        </form>
-      </div>
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Email <span className="required">*</span></label>
+          <input
+            type="email"
+            placeholder="Enter Email"
+            name="email"
+            onChange={handleInputChange}
+                              className="form-input"
+
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Cell Phone Number <span className="required">*</span></label>
+          <input
+            type="text"
+            placeholder="*******"
+            name="cellPhone"
+            onChange={handleInputChange}
+                              className="form-input"
+
+          />
+        </div>
+
+        <button className={styles.saveBtn} disabled={!isFormValid}>
+          Update
+        </button>
+      </form>
     </div>
   );
 };
 
-export default UpdateBondsmanForm;
+export default UpdateBondsman;

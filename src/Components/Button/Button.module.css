@@ -1,34 +1,37 @@
 .btnStyle {
-  /* background-color: #fa6f6a; */
   background-color: #ffff00;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 500;
-  color: #000000;
+  color: #000;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.25s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  justify-content: start;
-  width: 120px;
+  justify-content: flex-start;
+  width: 85%;
+  padding: 10px 14px;    /* 🔽 Space slightly reduced */
+  gap: 8px;              /* 🔽 Icon & text gap reduced */
+  margin: 4px auto;      /* 🔽 Button gap reduced */
 }
 
+/* Hover Effect */
 .btnStyle:hover {
-  background-color: #ffff00;
-  transform: translatrgb(66, 66, 255);
+  background-color: #ffeb00;
+  transform: translateY(-1px);
 }
 
 .btnStyle:active {
   transform: scale(0.98);
 }
 
-/* Responsive: mobile */
-@media (max-width: 767px) {
+/* Responsive mobile */
+@media (max-width: 768px) {
   .btnStyle {
-    font-size: 14px;
-    padding: 9px 14px;
-    margin-top: 15px;
+    width: auto;
+    padding: 9px 12px;
+    margin: 3px 8px;
   }
 }

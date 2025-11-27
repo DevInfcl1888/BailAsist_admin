@@ -1,32 +1,41 @@
-/* MASTER WRAPPER — Keeps consistent spacing */
+/* =======================================
+   MASTER WRAPPER — Keeps consistent spacing
+======================================= */
 .pageWrapper {
-  margin-left: 220px; /* Sidebar gap */
+margin: 25px;
   padding: 20px;
   transition: 0.3s ease;
+  max-width: 100%;
 }
+
 
 /* Tablet */
 @media (max-width: 1024px) {
   .pageWrapper {
-    margin-left: 200px;
+    margin-left: 180px;
   }
 }
 
-/* Mobile — sidebar moves up so no left margin */
+/* Mobile — sidebar removes left margin */
 @media (max-width: 768px) {
   .pageWrapper {
-    margin-left: 0;
+    margin: 0;
     padding: 15px;
   }
 }
-/* ================= TABLE WRAPPER ================= */
+
+/* =======================================
+   TABLE WRAPPER
+======================================= */
 .tableContainer {
   width: 100%;
   overflow-x: auto;
   background: white;
   border-radius: 6px;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 15px;
+  padding: 0px;
+  padding-bottom: 15px;
+  padding-top: 15px;
   box-sizing: border-box;
 }
 
@@ -36,53 +45,46 @@
 
 .bondsmanTable {
   width: 100%;
-  /* min-width: 550px; */
   border-collapse: collapse;
 }
 
 /* Tablet responsiveness */
 @media (max-width: 1024px) {
   .tableContainer {
-    margin-left: 180px;
-    width: calc(100% - 180px);
-  }
-}
-
-/* Mobile - sidebar above so no left margin */
-@media (max-width: 768px) {
-  .tableContainer {
     margin-left: 0;
     width: 100%;
-    padding: 12px;
   }
 }
 
-/* TABLE STYLE */
-/* .bondsmanTable {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  min-width: 600px; /* important for scroll on mobile *
-} 
-*/
+/* Mobile table */
+@media (max-width: 768px) {
+  .tableContainer {
+    padding: 10px;
+  }
 
-/* Table header */
+  .bondsmanTable {
+    min-width: 600px; /* allow horizontal scroll */
+  }
+}
+
+/* =======================================
+   TABLE STYLING
+======================================= */
 .bondsmanTable th {
   background-color: #f1f1f1;
   text-align: left;
-  /* padding: 12px 16px; */
-  font-weight: 600;
+  font-weight: 400;
   white-space: nowrap;
+  padding: 12px 16px;
+  font-size: 18px;
 }
 
-/* Table rows */
 .bondsmanTable td {
   padding: 12px 16px;
   border-top: 1px solid #eee;
   vertical-align: middle;
 }
 
-/* Hover effect */
 .bondsmanTable tr:hover {
   background-color: #f9f9f9;
 }
@@ -94,7 +96,6 @@
   border-radius: 4px;
   padding: 6px 8px;
   cursor: pointer;
-  flex-direction: row;
   font-size: 14px;
   font-weight: 500;
   transition: 0.2s ease;
@@ -110,6 +111,7 @@
   color: white;
 }
 
+/* Status Tags */
 .statusActive,
 .statusNonActive {
   padding: 5px 10px;
@@ -126,13 +128,18 @@
   background-color: #ff0000;
 }
 
-/* ---------------- HEADER BAR ---------------- */
+/* =======================================
+   HEADER BAR (Title + Search)
+======================================= */
 .headerBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 18px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
+
 .searchBox {
   display: flex;
   align-items: center;
@@ -152,36 +159,69 @@
   font-size: 15px;
 }
 
-/* Tablet header */
-@media (max-width: 1024px) {
-  .headerBar {
-    margin-left: 180px;
-  }
+/* Prevent zoom when tapping input */
+.searchBox input {
+  font-size: 16px !important;
 }
 
-/* Mobile header collapses */
+/* =======================================
+   MOBILE: Keep Title Left & Search Right
+======================================= */
 @media (max-width: 768px) {
   .headerBar {
-    flex-direction: column;
-    gap: 12px;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100%;
+    gap: 0;
+  }
+
+  .headerBar h2 {
+    font-size: 18px;
+    flex: 1;
+    text-align: left;
   }
 
   .searchBox {
-    width: 100%;
+    width: auto;
+    flex-shrink: 0;
   }
 
+  .searchBox input {
+    width: 140px;
+    font-size: 14px;
+  }
+
+  /* Table on mobile */
   .bondsmanTable th,
   .bondsmanTable td {
     padding: 8px 10px;
     font-size: 13px;
   }
 }
-/* Pagination */
+
+/* EXTRA SMALL devices */
+@media (max-width: 400px) {
+  .searchBox input {
+    width: 110px;
+  }
+
+  .headerBar h2 {
+    font-size: 16px;
+  }
+}
+
+/* =======================================
+   PAGINATION
+======================================= */
 .pagination {
   margin-top: 18px;
   display: flex;
   justify-content: center;
   gap: 10px;
+  border-top: 1px solid rgba(0,0,0,0.15);
+  padding-top: 12px;
+
 }
 
 .pagination button {
@@ -197,11 +237,78 @@
   background: #dbdbdb;
 }
 
-.activePage::before {
-  border-bottom: #000cff;
-}
 .activePage {
   font-weight: bolder;
-  /* background: #000cff; */
-  /* border-color: #000cff; */
+}
+@media (max-width: 768px) {
+  /* ❌ DON’T hide overflow for cells with buttons */
+  .bondsmanTable td:last-child {
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
+
+  /* Buttons shrink but visible */
+  .actionBtn {
+    padding: 4px 6px !important;
+    font-size: 11px;
+    margin: 2px;
+    white-space: nowrap;
+  }
+
+  .editBtn, .deleteBtn {
+    min-width: 45px;
+  }
+}
+.actionButtons {
+  display: flex;
+  flex-direction: row !important; /* FORCE ROW */
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* space between buttons */
+  white-space: nowrap; /* prevent wrap */
+}
+
+.actionButtons button {
+  min-width: 60px; /* avoid shrinking */
+}
+
+* {
+  font-family: "Lexend", sans-serif !important;
+}
+.titleClass{
+  font-size: "18px";
+  font-weight: 500;
+}
+.searchBox {
+  position: relative;
+  width: 210px;      /* adjust if needed */
+  background-color: "#0001FC";
+}
+
+.searchBox input {
+  width: 100%;
+  padding: 8px 12px 8px 36px; /* icon ke liye left space */
+  background: transparent;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;      /* 👈 font size small */
+  outline: none;
+}
+
+.searchBox input::placeholder {
+  color: #ffffffb3;  /* 🔥 white placeholder */
+  font-size: 13px;
+}
+
+/* 🔎 Search Icon Style */
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #ffffffb3;
+  font-size: 14px;
+  pointer-events: none;
+  height: "14px";
+  width:"14px";
 }

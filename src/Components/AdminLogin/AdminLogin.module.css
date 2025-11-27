@@ -233,12 +233,15 @@ input[type="password"] {
     box-sizing: border-box;
   }
 }
-
+  html,
+  body {
+    background-color: #F9F9F9;
+  }
 /* 📲 Small mobiles */
 @media (max-width: 480px) {
   html,
   body {
-    background-color: #ffff66;
+    background-color: #F9F9F9;
   }
 
   .loginBox {
@@ -280,5 +283,15 @@ input[type="password"] {
     width: 28px;
     height: 28px;
     border-width: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .inputWrapper input {
+    font-size: 16px;
+    padding: 10px 36px 10px 10px;
+  }
+  .button {
+    font-size: 16px;
   }
 }

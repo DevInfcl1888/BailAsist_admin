@@ -4,8 +4,9 @@ import Dashboard from "./Components/Dashboard/Dashboard";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import AddUser from "./Components/AddDataForm/AddUserTable";
 import AddBondsman from "./Components/AddDataForm/AddBondsmanForm";
-import UpdateUser from "./Components/AddDataForm/updateUserForm";
+// import UpdateUser from "./Components/AddDataForm/updateUserForm";
 import UpdateBondsmanForm from "./Components/AddDataForm/updateBondsmanForm";
+import EditUser from "./Components/AddDataForm/EditUser";
 
 function App() {
   return (
@@ -41,7 +42,7 @@ function App() {
             path="/UpdateUser"
             element={
               <ProtectedRoute>
-                <UpdateUser />
+                <EditUser/>
               </ProtectedRoute>
             }
           />

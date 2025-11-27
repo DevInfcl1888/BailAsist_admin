@@ -2,8 +2,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 const axiosInstace = axios.create({
-  // baseURL: "https://assistt.duckdns.org",
-  baseURL: "http://localhost:8080",
+  baseURL: "https://assistt.duckdns.org",
+  // baseURL: "http://localhost:8080",
 });
 
 axiosInstace.interceptors.request.use((config) => {

@@ -1,0 +1,232 @@
+/* EditUserForm.css */
+/* 🔵 Desktop Default: Sidebar fixed रहता है */
+.sidebar {
+  width: 240px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background: #1e1e2d;
+  transition: all 0.3s ease;
+}
+
+/* Toggle button desktop me hidden */
+.menu-toggle {
+  display: none;
+}
+
+/* 📱 Mobile Mode */
+@media (max-width: 768px) {
+  .sidebar {
+    left: -240px; /* Hide on mobile initially */
+  }
+
+  .sidebar.active {
+    left: 0; /* Show when toggle */
+  }
+
+  .menu-toggle {
+    display: block;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    background: #1e1e2d;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 9999;
+  }
+}
+
+.edit-user-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 0px;
+  background-color: #F9F9F9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+  padding: 30px;
+}
+
+.form-title {
+  text-align: center;
+  color: #000;
+  margin-bottom: 30px;
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+
+.profile-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+.profile-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.profile-image-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.profile-image-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* 👈 Prevent stretch */
+  object-position: center; /* Center crop */
+}
+
+
+/* Pencil Icon OUTSIDE */
+.edit-icon {
+  position: absolute;
+  top: 85px;       /* ⬆️ outside */
+  right: -2px;     /* ➡️ outside */
+  background: #0001FC ;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #F9F9F9; /* fancy look */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+  color: white;
+  font-size: 16px;
+}
+
+.edit-icon:hover {
+  transform: scale(1.1);
+  background: #6B7280;
+}
+
+.file-input {
+  display: none;
+}
+
+
+.file-input {
+  display: none;
+}
+
+.edit-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.name-row {
+  display: flex;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+
+.form-label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #000;
+  font-size: 14px;
+}
+
+.required {
+  color: #FF0000;
+}
+
+.form-input {
+  padding: 12px 14px;
+  border: 1px solid #6B7280;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: white;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #676b80;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.form-input::placeholder {
+  color: #3A3737CC;
+  font-size:"12px";
+  font-weight: 400;
+}
+
+.save-button {
+  padding: 14px 20px;
+  background: #0001FC;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.save-button:hover {
+  background: #5a6fd8;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .form-wrapper {
+    padding: 20px;
+  }
+  
+  .name-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-input {
+    padding: 10px 12px;
+  }
+  
+  .profile-image-wrapper {
+    width: 100px;
+    height: 100px;
+  }
+}
+.save-button:disabled {
+  background: #6B7280;
+  cursor: not-allowed;
+  color: #fff;
+}
+.page-layout{
+  background-color: #F9F9F9;
+}

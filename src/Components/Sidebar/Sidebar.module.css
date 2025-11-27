@@ -1,4 +1,4 @@
-/* ----- SIDEBAR (LEFT FIXED ON DESKTOP) ----- */
+/* Desktop fixed */
 .divImg {
   position: fixed;
   top: 0;
@@ -12,21 +12,37 @@
   padding-top: 20px;
   gap: 20px;
   z-index: 1000;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Tablet - keep slightly smaller */
-@media (max-width: 1024px) {
-  .divImg {
-    width: 200px;
-  }
+/* ---------- MOBILE TOGGLE BUTTON ---------- */
+.mobileToggle {
+  display: none;
 }
 
-/* Mobile - sidebar goes TOP */
+/* ---------- MOBILE SIDEBAR ---------- */
 @media (max-width: 768px) {
+  .mobileToggle {
+    display: block;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    background: #ffff00;
+    padding: 7px;
+    border-radius: 8px;
+    z-index: 1100;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
   .divImg {
-    position: relative;
-    width: 100%;
-    height: auto;
-    padding: 20px 0;
+    left: -220px; /* hide sidebar */
+    height: 100vh;
+    width: 200px;
+    padding-top: 25px;
+  }
+
+  .showSidebar {
+    left: 0; /* slide in */
   }
 }
