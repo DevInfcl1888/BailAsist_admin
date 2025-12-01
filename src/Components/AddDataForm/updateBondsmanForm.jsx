@@ -1,23 +1,27 @@
 import React, { useState, useRef } from "react";
 import styles from "./AddUserForm.module.css";
 import Sidebar from "../Sidebar/Sidebare";
+import { useLocation } from "react-router-dom";
 
 const UpdateBondsman = () => {
+  const { state } = useLocation();
+  const user = state?.bondsman;
+
   const [profileImage, setProfileImage] = useState(null);
   const [profilePreview, setProfilePreview] = useState(null);
   const [isSideOpen, setIsSideOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    cellPhone: ""
+    name: user?.name ?? "",
+    phone: user?.phoneNo ?? "",
+    email: user?.email ?? "",
+    cellPhone: "",
   });
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -70,57 +74,63 @@ const UpdateBondsman = () => {
             onChange={handleImageChange}
             accept="image/*"
             className={styles.fileInput}
-            
           />
         </div>
       </div>
 
       <form className={styles.formWrapper}>
         <div className={styles.formGroup}>
-          <label>Full Name <span className="required">*</span></label>
+          <label>
+            Full Name <span className="required">*</span>
+          </label>
           <input
             type="text"
             placeholder="Enter Name"
             name="name"
             onChange={handleInputChange}
-                              className="form-input"
-
+            className="form-input"
+            value={formData?.name}
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>Phone Number<span className="required">*</span></label>
+          <label>
+            Phone Number<span className="required">*</span>
+          </label>
           <input
             type="text"
             placeholder="Enter Phone"
             name="phone"
             onChange={handleInputChange}
-                              className="form-input"
-
+            className="form-input"
+            value={formData?.phone}
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>Email <span className="required">*</span></label>
+          <label>
+            Email <span className="required">*</span>
+          </label>
           <input
             type="email"
             placeholder="Enter Email"
             name="email"
             onChange={handleInputChange}
-                              className="form-input"
-
+            className="form-input"
+            value={formData?.email}
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>Cell Phone Number <span className="required">*</span></label>
+          <label>
+            Cell Phone Number <span className="required">*</span>
+          </label>
           <input
             type="text"
             placeholder="*******"
             name="cellPhone"
             onChange={handleInputChange}
-                              className="form-input"
-
+            className="form-input"
           />
         </div>
 

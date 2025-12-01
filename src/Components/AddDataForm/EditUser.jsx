@@ -1,15 +1,19 @@
 import React, { useState, useRef } from "react";
 import "./EditUserForm.css";
 import Sidebar from "../Sidebar/Sidebare";
+import { useLocation } from "react-router-dom";
 
 const EditUserForm = () => {
+    const { state } = useLocation(); 
+  const user = state?.user; 
   const [formData, setFormData] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    email: "test@gmail.com",
-    cellPhone: "",
+    firstName: user?.firstName ?? "",
+    middleName: user?.middleName ?? "",
+    lastName: user?.lastName ?? "",
+    email: user?.email ?? "",
+    cellPhone: user?.phoneNo ?? "",
   });
+
 
   const [profileImage, setProfileImage] = useState(null);
   const [profilePreview, setProfilePreview] = useState(null);
@@ -48,6 +52,11 @@ const EditUserForm = () => {
     console.log("Form submitted:", formData);
     console.log("Profile image:", profileImage);
   };
+
+
+
+
+
 
   return (
     <div className="page-layout">
