@@ -33,13 +33,13 @@
 /* MOBILE FIX */
 @media (max-width: 768px) {
   .btnStyle {
-    width: 90%;              /* ✅ Sari buttons same width */
+    width: 90%;             
     margin: 6px auto;
-    padding: 10px 12px;      /* ❗ Thoda compact */
-    gap: 5px;                /* ✅ Icon & text paas */
+    padding: 10px 12px;      
+    gap: 5px;               
   }
 
   .btnStyle span {
-    margin-left: 4px;        /* ✅ Text thoda left shift */
+    margin-left: 4px;       
   }
 }
