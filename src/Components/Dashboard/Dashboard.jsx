@@ -260,32 +260,32 @@ function Dashboard() {
     }
   };
 
-  const handleUploadClick = async () => {
-    if (!file) {
-      Swal.fire("Error", "Please select a file first", "error");
-      return;
-    }
+ const handleUploadClick = async () => {
+  if (!file) {
+    Swal.fire("Error", "Please select a file first", "error");
+    return;
+  }
 
-    try {
-      setUploadStatus("uploading");
-      
-      const formData = new FormData();
-      formData.append("advertisement", file);
+  try {
+    setUploadStatus("uploading");
 
-      // Replace with your actual upload endpoint
-      await axiosInstace.post("/api/v1/admin/uploadAdvertisement", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+    const formData = new FormData();
+    formData.append("adImg", file); // 👈 correct name
 
-      setUploadStatus("completed");
-      Swal.fire("Success", "File uploaded successfully!", "success");
-    } catch (err) {
-      setUploadStatus("");
-      Swal.fire("Error", "Upload failed. Please try again.", "error");
-    }
-  };
+    const res = await axiosInstace.post(
+      "/api/v1/admin/uploadAds", 
+      formData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
+
+    setUploadStatus("completed");
+    Swal.fire("Success", "File uploaded successfully!", "success");
+  } catch (err) {
+    setUploadStatus("");
+    Swal.fire("Error", "Upload failed. Please try again.", "error");
+  }
+};
+
 
   const handleRemoveFile = () => {
     setFile(null);

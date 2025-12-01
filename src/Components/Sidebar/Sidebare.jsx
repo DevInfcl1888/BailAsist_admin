@@ -2,58 +2,70 @@ import React, { useState } from "react";
 import styles from "./Sidebar.module.css";
 import logo from "../../Assets/logo.png";
 import Button from "../Button/Button";
-import { useNavigate } from "react-router-dom";
-import axiosInstace from "../../utils/axiosInstance";
+import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
-import { Menu } from "lucide-react"; // Toggle icon
+import { Menu } from "lucide-react";
 
 const Sidebar = () => {
   const [error, setError] = useState("");
-  const [loader, setLoader] = useState(false);
   const [open, setOpen] = useState(false);
-  const [users, setUsers] = useState([]);
-
+  const [activeBtn, setActiveBtn] = useState(""); // Track active button
   const navigate = useNavigate();
+  const location = useLocation();
 
   const toggleSidebar = () => setOpen(!open);
 
-  // const handleLogout = async () => {
-  //   localStorage.removeItem("accessToken");
-  //   navigate("/");
-  // };
   const handleLogout = async () => {
-  const confirm = await Swal.fire({
-    title: "Logout",
-    text: "Are you sure you want to logout ?",
-    // icon: "warning",
-    showCancelButton: true,
-    cancelButtonText: "Cancel",
-    confirmButtonText: "Comfirm",
-       confirmButtonColor: "#d33",   // red button  
-    cancelButtonColor: "#3085d6",
-    width: "350px",
+    setActiveBtn("Logout"); // mark button as active immediately
+    const confirm = await Swal.fire({
+      title: "Logout",
+      text: "Are you sure you want to logout?",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonText: "Confirm",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      width: "350px",
+    });
 
-  });
+    if (confirm.isConfirmed) {
+      localStorage.removeItem("accessToken");
+      navigate("/");
+    } else {
+      setActiveBtn(""); // reset active if canceled
+    }
+  };
 
-  if (confirm.isConfirmed) {
-    localStorage.removeItem("accessToken")
+  const handleContactUs = () => {
+    setActiveBtn("Contact Us");
+    navigate("/contact");
+  };
 
-    navigate("/");
-  }
-};
+  const handleDashboard = () => {
+    setActiveBtn("Dashboard");
+    navigate("/dashboard");
+  };
 
+  const handlePrivacy = () => {
+    setActiveBtn("Privacy");
+    navigate("/privacy");
+  };
 
   return (
     <>
-      {/* ---------- TOGGLE BUTTON FOR MOBILE ---------- */}
       <div className={styles.mobileToggle} onClick={toggleSidebar}>
         <Menu size={25} />
       </div>
 
-      {/* ---------- SIDEBAR ---------- */}
       <div className={`${styles.divImg} ${open ? styles.showSidebar : ""}`}>
         <img src={logo} height={"150px"} alt="" />
-        <Button onLogout={handleLogout} />
+        <Button
+          onUserClick={handleDashboard}
+          onBondsmanClick={handleContactUs}
+          onPrivacyClick={handlePrivacy}
+          onLogout={handleLogout}
+          activeBtn={activeBtn} // pass active button state
+        />
         <p style={{ color: "red" }}>{error}</p>
       </div>
     </>

@@ -7,6 +7,9 @@ import AddBondsman from "./Components/AddDataForm/AddBondsmanForm";
 // import UpdateUser from "./Components/AddDataForm/updateUserForm";
 import UpdateBondsmanForm from "./Components/AddDataForm/updateBondsmanForm";
 import EditUser from "./Components/AddDataForm/EditUser";
+import ContactUsScreen from "./Components/service/ContactUs";
+import Privacy from "./Components/service/privact";
+
 
 function App() {
   return (
@@ -51,6 +54,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <UpdateBondsmanForm />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/contact"
+            element={
+              <ProtectedRoute>
+                <ContactUsScreen />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/privacy"
+            element={
+              <ProtectedRoute>
+                <Privacy />
               </ProtectedRoute>
             }
           />

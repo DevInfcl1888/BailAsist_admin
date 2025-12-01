@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import styles from "./AddUserForm.module.css";
 import Sidebar from "../Sidebar/Sidebare";
 import { useLocation } from "react-router-dom";
+import axiosInstace from "../../utils/axiosInstance";
+import Swal from "sweetalert2";
 
 const UpdateBondsman = () => {
   const { state } = useLocation();
@@ -9,14 +11,42 @@ const UpdateBondsman = () => {
 
   const [profileImage, setProfileImage] = useState(null);
   const [profilePreview, setProfilePreview] = useState(null);
-  const [isSideOpen, setIsSideOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+  
 
   const [formData, setFormData] = useState({
     name: user?.name ?? "",
     phone: user?.phoneNo ?? "",
     email: user?.email ?? "",
-    cellPhone: "",
+    cellPhone: user?.phoneNo ?? "",
   });
+
+  // ---------------- HANDLE UPDATE API ----------------
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    if (loading) return ;
+    setLoading(true)
+
+    try {
+      const res = await axiosInstace.post(
+        `/api/v1/admin/updateBondsmanDetails/${user?._id}`,
+        {
+          name: formData.name,
+          email: formData.email,
+          phoneNo: formData.phone, // API me phoneNo required hai
+        }
+      );
+
+      console.log("Update successful", res.data);
+      Swal.fire("Updated!", "User has been Updated.", "success");
+
+    } catch (error) {
+      console.log(error);
+    Swal.fire("Error", "Upload failed. Please try again.", "error");
+    }
+    setLoading(false)
+  };
+  // ----------------------------------------------------
 
   const handleInputChange = (e) => {
     setFormData({
@@ -38,9 +68,7 @@ const UpdateBondsman = () => {
     if (file) {
       setProfileImage(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePreview(reader.result);
-      };
+      reader.onloadend = () => setProfilePreview(reader.result);
       reader.readAsDataURL(file);
     }
   };
@@ -80,62 +108,44 @@ const UpdateBondsman = () => {
 
       <form className={styles.formWrapper}>
         <div className={styles.formGroup}>
-          <label>
-            Full Name <span className="required">*</span>
-          </label>
+          <label>Full Name *</label>
           <input
             type="text"
             placeholder="Enter Name"
             name="name"
             onChange={handleInputChange}
-            className="form-input"
-            value={formData?.name}
+            value={formData.name}
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>
-            Phone Number<span className="required">*</span>
-          </label>
-          <input
-            type="text"
-            placeholder="Enter Phone"
-            name="phone"
-            onChange={handleInputChange}
-            className="form-input"
-            value={formData?.phone}
-          />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label>
-            Email <span className="required">*</span>
-          </label>
+          <label>Email *</label>
           <input
             type="email"
             placeholder="Enter Email"
             name="email"
             onChange={handleInputChange}
-            className="form-input"
-            value={formData?.email}
+            value={formData.email}
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>
-            Cell Phone Number <span className="required">*</span>
-          </label>
+          <label>Cell Phone *</label>
           <input
             type="text"
             placeholder="*******"
             name="cellPhone"
             onChange={handleInputChange}
-            className="form-input"
+            value={formData.cellPhone}
           />
         </div>
 
-        <button className={styles.saveBtn} disabled={!isFormValid}>
-          Update
+        <button
+          className={styles.saveBtn}
+          disabled={!isFormValid}
+          onClick={handleUpload}
+        >
+          {loading ? "Updaing..." :"Update"}
         </button>
       </form>
     </div>

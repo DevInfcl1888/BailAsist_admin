@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import "./EditUserForm.css";
 import Sidebar from "../Sidebar/Sidebare";
 import { useLocation } from "react-router-dom";
+import axiosInstace from "../../utils/axiosInstance";
+import Swal from "sweetalert2";
 
 const EditUserForm = () => {
     const { state } = useLocation(); 
@@ -17,6 +19,8 @@ const EditUserForm = () => {
 
   const [profileImage, setProfileImage] = useState(null);
   const [profilePreview, setProfilePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const fileInputRef = useRef(null);
 
   // Sidebar Toggle 
@@ -54,7 +58,29 @@ const EditUserForm = () => {
   };
 
 
+const updateUser = async ()=>{
+   if (loading) return;
+  setLoading(true);
+try{
+const res = await axiosInstace.post(`/api/v1/admin/updateUserDetails/${user?._id}` ,
+  {
+    firstName:formData.firstName ,
+    middleName:formData.middleName ,
+    lastName:formData.lastName,
+    email:formData.email,
+    phoneNo:formData.cellPhone,
+    isActive:true,
+  }
+)
+      Swal.fire("Updated!", "User has been Updated.", "success");
 
+}catch(error){
+console.log(error)
+    Swal.fire("Error", "Upload failed. Please try again.", "error");
+
+}
+ setLoading(false);
+}
 
 
 
@@ -180,8 +206,9 @@ const EditUserForm = () => {
   type="submit" 
   className="save-button" 
   disabled={!formData.firstName || !formData.lastName || !formData.email || !formData.cellPhone}
+  onClick={updateUser}
 >
-  Save
+  {loading ? "Saving..." : "Save"}
 </button>
           </form>
         </div>
