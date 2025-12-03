@@ -85,7 +85,7 @@ const UpdateBondsman = () => {
     onClick={() => window.history.back()}
   />
 
-  <h2 className={styles.title}>Edit Bondsman</h2>
+  <h2 className={styles.title}>Update Bondsman Info</h2>
 </div>
       <div className={styles.profileSection}>
         <div className={styles.profileImageContainer}>

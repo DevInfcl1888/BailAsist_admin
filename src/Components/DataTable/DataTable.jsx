@@ -1,5 +1,4 @@
-import Swal from "sweetalert2";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./DataTable.module.css";
 import NoData from "../CustomMessage/CustomMessage";
 import axiosInstace from "../../utils/axiosInstance";
@@ -17,10 +16,8 @@ const DataTable = ({
 }) => {
   const [loader, setLoader] = useState(false);
   const [errror, settError] = useState(false);
-
-  const [open, setOpen] = useState(false); // <-- popup state
-  const [deleteId, setDeleteId] = useState(null); // <-- store which ID to delete
-
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
   const navigate = useNavigate();
@@ -37,42 +34,13 @@ const DataTable = ({
   const currentPageData = data?.slice(startIndex, startIndex + limit) || [];
   const totalPages = Math.ceil((data?.length || 0) / limit);
 
-  useEffect(() => {
-    if (loading) {
-      Swal.fire({
-        title: "Loading...",
-        text: "Please wait",
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
-    } else {
-      Swal.close();
-    }
-  }, [loading]);
-
-  useEffect(() => {
-    if (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
-    } else {
-      Swal.close();
-    }
-  }, [error]);
-
   const handleEdit = (id) => {
     const selectedItem = data.find((u) => u._id === id);
-
     if (candidate === "User") {
       navigate("/UpdateUser", {
         state: { user: selectedItem, candidate: "User" },
       });
     }
-
     if (candidate === "Bondsman") {
       navigate("/UpdateBondsman", {
         state: { bondsman: selectedItem, candidate: "Bondsman" },
@@ -80,35 +48,44 @@ const DataTable = ({
     }
   };
 
-  // ---- OPEN POPUP WHEN DELETE CLICKED
   const handleDeleteClick = (id) => {
     setDeleteId(id);
     setOpen(true);
   };
 
-  // ---- DELETE CONFIRM LOGIC
   const confirmDelete = async () => {
     setOpen(false);
     setLoader(true);
-
     try {
-      Swal.fire({
-        title: "Deleting...",
-        text: "Please wait",
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading(),
-      });
-
       await axiosInstace.delete(`${deletAPI}/${deleteId}`);
       await fetchData();
-
-      Swal.fire("Deleted!", "Record has been deleted.", "success");
     } catch (error) {
       settError(error?.response?.data?.message || "Something went wrong");
-      Swal.fire("Error", "Unable to delete user", "error");
     } finally {
       setLoader(false);
     }
+  };
+
+  // Skeleton loader row
+  const renderSkeletonRow = () => {
+    return (
+      <tr>
+        {Array.from({ length: 6 }).map((_, idx) => (
+          <td key={idx}>
+            <div
+              style={{
+                height: "20px",
+                background:
+                  "linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)",
+                backgroundSize: "200% 100%",
+                borderRadius: "4px",
+                animation: "shimmer 1.5s infinite",
+              }}
+            ></div>
+          </td>
+        ))}
+      </tr>
+    );
   };
 
   return (
@@ -116,7 +93,6 @@ const DataTable = ({
       <div className={styles.tableContainer}>
         <div className={styles.headerBar}>
           <h2 className={titleClass}>{listName}</h2>
-
           <div className={styles.searchBox}>
             <span className={styles.searchIcon}>
               <img src="/New-search.png" style={{ height: "24px", width: "25px" }} />
@@ -125,24 +101,23 @@ const DataTable = ({
           </div>
         </div>
 
-        {!loading && (!data || data.length === 0) ? (
-          <NoData message={`No ${candidate} Found`} />
-        ) : (
-          !loading && (
-            <table className={styles.bondsmanTable}>
-              <thead>
-                <tr>
-                  <th>Avatar</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {currentPageData?.map((user) => (
+        <table className={styles.bondsmanTable}>
+          <thead>
+            <tr>
+              <th>Avatar</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading
+              ? Array.from({ length: limit }).map((_, idx) => renderSkeletonRow(idx))
+              : !data || data.length === 0
+              ? <tr><td colSpan={6}><NoData message={`No ${candidate} Found`} /></td></tr>
+              : currentPageData.map((user) => (
                   <tr key={user._id}>
                     <td>
                       <img
@@ -150,20 +125,22 @@ const DataTable = ({
                         style={{ height: "39px", width: "39px" }}
                       />
                     </td>
+                   <td>
+  {(() => {
+    const fullName = `${capitalizeFirst(user.firstName || user.name)} ${
+      capitalizeFirst(user.middleName) || ""
+    } ${capitalizeFirst(user.lastName)}`.trim();
 
-                    <td>{`${capitalizeFirst(
-                      user.firstName || user.name
-                    )} ${capitalizeFirst(user.middleName) || ""} ${capitalizeFirst(
-                      user.lastName
-                    )}`}</td>
+    return fullName.length > 10 ? fullName.slice(0, 10) + "..." : fullName;
+  })()}
+</td>
+
 
                     <td>{user.email}</td>
-
                     <td>
                       {user.flag} {user.countryCode}
                       {user.phoneNo}
                     </td>
-
                     <td>
                       <span
                         className={
@@ -175,7 +152,6 @@ const DataTable = ({
                         {user.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
-
                     <td>
                       <button
                         className={`${styles.actionBtn} ${styles.editBtn}`}
@@ -183,7 +159,6 @@ const DataTable = ({
                       >
                         Edit
                       </button>
-
                       <button
                         className={`${styles.actionBtn} ${styles.deleteBtn}`}
                         onClick={() => handleDeleteClick(user._id)}
@@ -193,17 +168,14 @@ const DataTable = ({
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          )
-        )}
+          </tbody>
+        </table>
 
         {data?.length > 0 && (
           <div className={styles.pagination}>
             <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
               Prev
             </button>
-
             <button
               disabled={page === totalPages}
               onClick={() => setPage((p) => p + 1)}
@@ -214,17 +186,23 @@ const DataTable = ({
         )}
       </div>
 
-      {/* ---- DELETE CONFIRM POPUP ---- */}
-     <ConfirmPopup
-  isOpen={open}
-  title={`Delete`}  // dynamic title
-  message={`Are you sure you want to delete this ${candidate.toLowerCase()}?`} // dynamic message
-  confirmText="Delete"
-  cancelText="Cancel"
-  onCancel={() => setOpen(false)}
-  onConfirm={confirmDelete}
-/>
+      <ConfirmPopup
+        isOpen={open}
+        title={`Delete`}
+        message={`Are you sure you want to delete this ${candidate.toLowerCase()}?`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        onCancel={() => setOpen(false)}
+        onConfirm={confirmDelete}
+      />
 
+      {/* Skeleton shimmer animation */}
+      <style>{`
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+      `}</style>
     </div>
   );
 };
