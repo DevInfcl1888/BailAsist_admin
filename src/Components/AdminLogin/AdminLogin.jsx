@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./AdminLogin.module.css"; // 👈 CSS import
+import styles from "./AdminLogin.module.css";
 import logo from "../../Assets/logo.png";
 import axiosInstace from "../../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
@@ -18,65 +18,69 @@ function AdminLogin() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    Swal.fire({
-      title: "Loading...",
-      text: "Please wait",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
+
+    // Swal.fire({
+    //   title: "Loading...",
+    //   text: "Please wait",
+    //   allowOutsideClick: false,
+    //   didOpen: () => {
+    //     Swal.showLoading();
+    //   },
+    // });
+
     try {
       const res = await axiosInstace.post(`api/v1/admin/adminLogin`, {
         username,
         password,
       });
+
+      Swal.close();
+
       localStorage.setItem("accessToken", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
-      console.log("login success", res);
-      navigate("/dashboard");
-    } catch (error) {
-      if (error.response?.data.message) {
-        setError(error.response?.data.message);
-        setLoading(false);
-        if (!loading) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: `${error.response?.data.message}`,
-          });
-        } else {
-          Swal.close();
-        }
-      } else {
-        setError("Something went wrong. Please try again.");
-        setLoading(false);
-      }
 
-      console.log("Error", error);
-      console.log("error.response?.data.message", error.response?.data.message);
-    } finally {
+      navigate("/dashboard");
+   } catch (error) {
+  Swal.close();
+
+  // Always show "Wrong ID or Password" on invalid login
+  const message =
+    error.response?.status === 401
+      ? "Wrong ID or Password"
+      : error.response?.data?.message || "Something went wrong. Please try again.";
+
+  setError(message);
+
+  Swal.fire({
+    icon: "error",
+    title: "Login Failed",
+    text: message,
+  });
+
+  console.log("Error:", error);
+} finally {
       setLoading(false);
     }
-    console.log("Username:", username, "Password:", password);
   };
 
   return (
     <>
       <div className={styles.container}>
         <img src={logo} alt="Admin Logo" className={styles.adminLogo} />
+
         <div className={styles.adminLoginContainer}>
           <h1>Admin Login</h1>
+
           <div className={styles.loginBox}>
             <p>Please fill in your unique admin login details below</p>
+
+            {/* SHOW ERROR BELOW TITLE */}
+            {error && <p className={styles.errorMessage}>{error}</p>}
 
             <form onSubmit={handleSubmit}>
               <div className={styles.formGroup}>
                 <label>
-                  Login{" "}
-                  <span style={{ color: "red" }} className="required">
-                    *
-                  </span>
+                  Username <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -86,12 +90,10 @@ function AdminLogin() {
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
+
               <div className={styles.formGroup}>
                 <label>
-                  Password{" "}
-                  <span style={{ color: "red" }} className="required">
-                    *
-                  </span>
+                  Password <span style={{ color: "red" }}>*</span>
                 </label>
 
                 <div className={styles.inputWrapper}>
@@ -102,23 +104,22 @@ function AdminLogin() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+
                   <span
                     className={styles.toggleEye}
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? "🙈" : "👁️"}
+                    <img
+                      src={showPassword ? "/open-eye.png" : "/close-eye.png"}
+                      alt={showPassword ? "Hide Password" : "Show Password"}
+                      style={{ width: "28px", height: "22px", cursor: "pointer" }}
+                    />
                   </span>
                 </div>
               </div>
+
               <button type="submit" className={styles.button}>
-                {/* {loading ? (
-                  <div className={styles.loaderContainer}>
-                    <div className={styles.loader}></div>
-                  </div>
-                ) : (
-                  "Submit"
-                )} */}
-                Sumbit
+                Submit
               </button>
             </form>
           </div>

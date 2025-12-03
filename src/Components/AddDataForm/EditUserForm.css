@@ -230,3 +230,26 @@
 .page-layout{
   background-color: #F9F9F9;
 }
+
+.form-header {
+  position: relative;        /* relative container for absolute children */
+  display: flex;
+  justify-content: center;   /* center the title */
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  position: absolute;        /* position left independent of title */
+  left: 0;                   /* stick to left side */
+  height: 22px;
+  width: 16px;
+  cursor: pointer;
+}
+
+.form-title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}

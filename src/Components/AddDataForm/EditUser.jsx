@@ -98,8 +98,18 @@ console.log(error)
 
       {/* Form Area */}
       <div className="edit-user-container">
+        
         <div className="form-wrapper">
-          <h2 className="form-title">Edit User</h2>
+         <div className="form-header">
+  <img
+    src="/back-button.png"
+    alt="Back"
+    className="back-button"
+    onClick={() => window.history.back()} // optional: navigate back
+  />
+  <h2 className="form-title">Edit User</h2>
+</div>
+
 
           {/* Profile Image */}
         <div className="profile-section">

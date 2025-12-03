@@ -1,13 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ContactUs.module.css";
 import Sidebar from "../Sidebar/Sidebare";
+import axiosInstace from "../../utils/axiosInstance";
+import Swal from "sweetalert2";
 
 export default function ContactUsScreen() {
   const [text, setText] = useState("");
   const [isSideOpen, setIsSideOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
   const chars = text.length;
+
+  // Fetch saved Contact Us text on mount
+  useEffect(() => {
+    fetchContactUs();
+  }, []);
+
+ const fetchContactUs = async () => {
+  try {
+    const res = await axiosInstace.get("/api/v1/admin/contactUs");
+
+    const savedText = res?.data?.contactUs?.text || "";
+
+    setText(savedText);
+  } catch (error) {
+    console.log("Error fetching Contact Us:", error);
+  }
+};
+
+
+  const saveContactUs = async () => {
+    try {
+      setLoading(true);
+
+      const payload = { text };
+
+      const res = await axiosInstace.post("/api/v1/admin/contactUs", payload);
+
+      Swal.fire("Updated!", "Contact Us has been Updated.", "success");
+      setLoading(false);
+    } catch (error) {
+      console.log("Error saving Contact Us:", error);
+      alert("Failed to save. Check console for details.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -18,7 +56,7 @@ export default function ContactUsScreen() {
 
       {/* Main Card */}
       <div className={styles.card}>
-        <h1 className={styles.title}>Contact US Editor</h1>
+        <h1 className={styles.title}>Contact Us Editor</h1>
 
         <textarea
           className={styles.textarea}
@@ -40,9 +78,10 @@ export default function ContactUsScreen() {
 
             <button
               className={styles.saveBtn}
-              onClick={() => alert("Saved: " + text)}
+              onClick={saveContactUs}
+              disabled={loading}
             >
-              Save Contact
+              {loading ? "Saving..." : "Save Contact"}
             </button>
           </div>
         </div>

@@ -1,0 +1,168 @@
+/* modules.css */
+
+/* Backdrop behind the modal */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal card */
+.modal {
+  width: min(520px, 90%);
+  background: #fff200; /* bright yellow */
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Top padding/heading area */
+.header {
+  padding: 22px 28px 8px;
+  text-align: center;
+}
+
+/* Title (Logout) */
+.title {
+  margin: 0;
+  color: #0001FC; /* vivid blue */
+  font-weight: 700;
+  font-size: 27px;
+  letter-spacing: 0.2px;
+  line-height: 1;
+}
+
+/* Body/message area */
+.body {
+  padding: 18px 28px 4px;
+  text-align: center;
+  color: #111;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: "25px";
+  padding-bottom: "20px";
+}
+
+/* Thin divider between body and footer */
+.bodyDivider {
+  height: 1px;
+  background: rgba(0,0,0,0.06);
+  width: 100%;
+  margin-top: "15px";
+}
+
+/* Footer with two buttons laid out horizontally */
+.footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  gap: 0;
+  height: 72px; /* matches visual proportion */
+}
+
+/* Individual button base */
+.button {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 21px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  user-select: none;
+}
+
+/* Left (Cancel) */
+.cancel {
+  color: #000; /* black-ish */
+}
+
+/* Right (Logout / Confirm) */
+.confirm {
+  color: #0001FC; /* same vivid blue as title */
+}
+
+/* Vertical divider between buttons */
+.footer::before {
+  content: "";
+  display: block;
+  grid-column: 1 / 1;
+  width: 1px;
+  background: rgba(0,0,0,0.08);
+  justify-self: end;
+  align-self: stretch;
+}
+
+/* Hover/focus states */
+.button:hover,
+.button:focus {
+  background: rgba(0,0,0,0.02);
+}
+
+.button:active {
+  background: rgba(0,0,0,0.04);
+}
+
+/* Make fonts scale nicely on very small screens */
+@media (max-width: 360px) {
+  .title { font-size: 24px; }
+  .body { font-size: 15px; }
+  .footer { height: 64px; }
+  .button { font-size: 18px; }
+}
+
+/* Accessibility: focus outline */
+.button:focus {
+  box-shadow: 0 0 0 3px rgba(7,51,255,0.12);
+  border-radius: 4px;
+}
+
+.footer {
+  display: flex;
+  height: 72px;
+}
+
+.button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Divider between buttons */
+.footer .button + .button {
+  border-left: 1px solid rgba(0,0,0,0.08);
+}
+
+/* Modal card */
+.modal {
+  width: min(450px, 90%); /* reduced from 520px */
+  background: #fff200;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Body/message area */
+.body {
+  padding: 18px 28px 24px; /* increased bottom padding for spacing */
+  text-align: center;
+  color: #000;
+  font-size: 18px;
+  font-weight: 500;
+}

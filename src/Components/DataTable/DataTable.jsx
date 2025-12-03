@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./DataTable.module.css";
 import NoData from "../CustomMessage/CustomMessage";
 import axiosInstace from "../../utils/axiosInstance";
-import { confirmDialog } from "../../utils/notificationToast";
 import { useNavigate } from "react-router-dom";
+import ConfirmPopup from "../Button/ConfirmPopup";
 
 const DataTable = ({
   listName,
@@ -17,13 +17,19 @@ const DataTable = ({
 }) => {
   const [loader, setLoader] = useState(false);
   const [errror, settError] = useState(false);
+
+  const [open, setOpen] = useState(false); // <-- popup state
+  const [deleteId, setDeleteId] = useState(null); // <-- store which ID to delete
+
   const [page, setPage] = useState(1);
-  const [limit] = useState(5); // rows per page
+  const [limit] = useState(5);
   const navigate = useNavigate();
+
   const titleClass =
     candidate === "User"
       ? `${styles.title} ${styles.headerBar_user}`
       : `${styles.title} ${styles.headerBar_bondsman}`;
+
   const capitalizeFirst = (str = "") =>
     str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 
@@ -52,7 +58,6 @@ const DataTable = ({
         icon: "error",
         title: "Oops...",
         text: "Something went wrong!",
-        footer: '<a href="#">Why do I have this issue?</a>',
       });
     } else {
       Swal.close();
@@ -75,57 +80,51 @@ const DataTable = ({
     }
   };
 
-  const handleDelete = async (id) => {
-    // e.preventDefault();
+  // ---- OPEN POPUP WHEN DELETE CLICKED
+  const handleDeleteClick = (id) => {
+    setDeleteId(id);
+    setOpen(true);
+  };
 
-    settError(true);
+  // ---- DELETE CONFIRM LOGIC
+  const confirmDelete = async () => {
+    setOpen(false);
+    setLoader(true);
+
     try {
-      const confirmation = await confirmDialog(
-        "Delete",
-        "Are you sure",
-        "warning",
-        "Delete",
-        "Cancel"
-      );
-      if (!confirmation.isConfirmed) return;
-
       Swal.fire({
         title: "Deleting...",
         text: "Please wait",
         allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
+        didOpen: () => Swal.showLoading(),
       });
 
-      const res = await axiosInstace.delete(`${deletAPI}/${id}`);
+      await axiosInstace.delete(`${deletAPI}/${deleteId}`);
       await fetchData();
-      Swal.fire("Deleted!", "User has been deleted.", "success");
 
-      setLoader(false);
-
-      console.log("res", res);
+      Swal.fire("Deleted!", "Record has been deleted.", "success");
     } catch (error) {
       settError(error?.response?.data?.message || "Something went wrong");
       Swal.fire("Error", "Unable to delete user", "error");
     } finally {
-      // 6. Loader OFF
       setLoader(false);
     }
   };
+
   return (
     <div className={styles.pageWrapper}>
-      
-
       <div className={styles.tableContainer}>
         <div className={styles.headerBar}>
-        <h2 className={titleClass}>{listName}</h2>
-        <div className={styles.searchBox}>
-  <span className={styles.searchIcon}><img src="/New-search.png" style={{height:"18px" , width:"18px"}} /></span>
-  <input placeholder="Search by Name, Phone No..." />
-</div>
+          <h2 className={titleClass}>{listName}</h2>
 
-      </div>
+          <div className={styles.searchBox}>
+            <span className={styles.searchIcon}>
+              <img src="/New-search.png" style={{ height: "24px", width: "25px" }} />
+            </span>
+            <input placeholder="Search by Name, Phone No..." />
+          </div>
+        </div>
+
         {!loading && (!data || data.length === 0) ? (
           <NoData message={`No ${candidate} Found`} />
         ) : (
@@ -145,14 +144,21 @@ const DataTable = ({
               <tbody>
                 {currentPageData?.map((user) => (
                   <tr key={user._id}>
-                    <td><img src="/table-profile.png" style={{height:"39px" , width:"39px"}}/></td>
-                    <td>{`${
-                      capitalizeFirst(user.firstName || user.name) || " "
-                    } ${capitalizeFirst(user.middleName) || " "} ${
-                      capitalizeFirst(user.lastName) || " "
-                    }`}</td>
+                    <td>
+                      <img
+                        src="/table-profile.png"
+                        style={{ height: "39px", width: "39px" }}
+                      />
+                    </td>
 
-                    <td>{user.email || " "}</td>
+                    <td>{`${capitalizeFirst(
+                      user.firstName || user.name
+                    )} ${capitalizeFirst(user.middleName) || ""} ${capitalizeFirst(
+                      user.lastName
+                    )}`}</td>
+
+                    <td>{user.email}</td>
+
                     <td>
                       {user.flag} {user.countryCode}
                       {user.phoneNo}
@@ -180,60 +186,45 @@ const DataTable = ({
 
                       <button
                         className={`${styles.actionBtn} ${styles.deleteBtn}`}
-                        onClick={() => handleDelete(user._id)}
+                        onClick={() => handleDeleteClick(user._id)}
                       >
                         Delete
                       </button>
                     </td>
                   </tr>
                 ))}
-
               </tbody>
             </table>
           )
         )}
-          {data?.length > 0 && (
-        <div className={styles.pagination}>
-          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
-            Prev
-          </button>
 
-         
-
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            Next
-          </button>
-        </div>
-      )}
-      </div>
-      {/* ---------------- PAGINATION UI ---------------- */}
-      {/* {data?.length > 0 && (
-        <div className={styles.pagination}>
-          <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
-            Prev
-          </button>
-
-          {[...Array(totalPages)].map((_, i) => (
-            <button
-              key={i}
-              className={page === i + 1 ? styles.activePage : ""}
-              onClick={() => setPage(i + 1)}
-            >
-              {i + 1}
+        {data?.length > 0 && (
+          <div className={styles.pagination}>
+            <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}>
+              Prev
             </button>
-          ))}
 
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            Next
-          </button>
-        </div>
-      )} */}
+            <button
+              disabled={page === totalPages}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* ---- DELETE CONFIRM POPUP ---- */}
+     <ConfirmPopup
+  isOpen={open}
+  title={`Delete`}  // dynamic title
+  message={`Are you sure you want to delete this ${candidate.toLowerCase()}?`} // dynamic message
+  confirmText="Delete"
+  cancelText="Cancel"
+  onCancel={() => setOpen(false)}
+  onConfirm={confirmDelete}
+/>
+
     </div>
   );
 };

@@ -13,8 +13,8 @@
   justify-content: flex-start;
   width: 85%;
   padding: 10px 14px;
-  gap: 8px;
-  margin: 4px auto;
+  gap: 1px;
+  margin: 14px auto; /* ↑ increased spacing */
 }
 
 /* Stable Hover */
@@ -33,13 +33,13 @@
 /* MOBILE FIX */
 @media (max-width: 768px) {
   .btnStyle {
-    width: 90%;             
-    margin: 6px auto;
-    padding: 10px 12px;      
-    gap: 5px;               
+    width: 90%;
+    margin: 10px auto;  /* ↑ increased spacing for mobile */
+    padding: 10px 12px;
+    gap: 5px;
   }
 
   .btnStyle span {
-    margin-left: 4px;       
+    margin-left: 4px;
   }
 }

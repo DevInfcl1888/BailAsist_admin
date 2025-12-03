@@ -183,11 +183,11 @@ function Dashboard() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      Swal.fire({
-        title: "Loading...",
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading(),
-      });
+      // Swal.fire({
+      //   title: "Loading...",
+      //   allowOutsideClick: false,
+      //   didOpen: () => Swal.showLoading(),
+      // });
 
       const [bondsmanRes, usersRes, usersData] = await Promise.all([
         axiosInstace.get("/api/v1/admin/getBondsmanDetails"),

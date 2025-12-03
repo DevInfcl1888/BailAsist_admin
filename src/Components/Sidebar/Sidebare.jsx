@@ -3,37 +3,36 @@ import styles from "./Sidebar.module.css";
 import logo from "../../Assets/logo.png";
 import Button from "../Button/Button";
 import { useNavigate, useLocation } from "react-router-dom";
-import Swal from "sweetalert2";
 import { Menu } from "lucide-react";
+import ConfirmPopup from "../Button/ConfirmPopup";
 
 const Sidebar = () => {
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [activeBtn, setActiveBtn] = useState(""); // Track active button
+  const [logoutConfirm, setLogoutConfirm] = useState(false); // Logout popup state
   const navigate = useNavigate();
   const location = useLocation();
 
   const toggleSidebar = () => setOpen(!open);
 
-  const handleLogout = async () => {
-    setActiveBtn("Logout"); // mark button as active immediately
-    const confirm = await Swal.fire({
-      title: "Logout",
-      text: "Are you sure you want to logout?",
-      showCancelButton: true,
-      cancelButtonText: "Cancel",
-      confirmButtonText: "Confirm",
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      width: "350px",
-    });
+  // Open Logout ConfirmPopup
+  const handleLogout = () => {
+    setActiveBtn("Logout");
+    setLogoutConfirm(true);
+  };
 
-    if (confirm.isConfirmed) {
-      localStorage.removeItem("accessToken");
-      navigate("/");
-    } else {
-      setActiveBtn(""); // reset active if canceled
-    }
+  // Called when user confirms logout
+  const confirmLogout = () => {
+    setLogoutConfirm(false);
+    localStorage.removeItem("accessToken");
+    navigate("/");
+  };
+
+  // Cancel logout
+  const cancelLogout = () => {
+    setLogoutConfirm(false);
+    setActiveBtn("");
   };
 
   const handleContactUs = () => {
@@ -53,12 +52,14 @@ const Sidebar = () => {
 
   return (
     <>
+      {/* Sidebar Toggle */}
       <div className={styles.mobileToggle} onClick={toggleSidebar}>
         <Menu size={25} />
       </div>
 
       <div className={`${styles.divImg} ${open ? styles.showSidebar : ""}`}>
-        <img src={logo} height={"150px"} alt="" />
+        <img src={logo} height={"150px"} alt="Logo" />
+
         <Button
           onUserClick={handleDashboard}
           onBondsmanClick={handleContactUs}
@@ -66,8 +67,20 @@ const Sidebar = () => {
           onLogout={handleLogout}
           activeBtn={activeBtn} // pass active button state
         />
+
         <p style={{ color: "red" }}>{error}</p>
       </div>
+
+      {/* ConfirmPopup for Logout */}
+      <ConfirmPopup
+        isOpen={logoutConfirm}
+        title="Logout"
+        message="Are you sure you want to logout?"
+        confirmText="Logout"
+        cancelText="Cancel"
+        onCancel={cancelLogout}
+        onConfirm={confirmLogout}
+      />
     </>
   );
 };

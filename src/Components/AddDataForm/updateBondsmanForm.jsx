@@ -76,9 +76,17 @@ const UpdateBondsman = () => {
   return (
     <div className={styles.pageWrapper}>
       <Sidebar />
+      
+  <div className={styles.header}>
+  <img
+    src="/back-button.png"
+    alt="Back"
+    className={styles.backButton}
+    onClick={() => window.history.back()}
+  />
 
-      <h2 className={styles.title}>Update Bondsman Info</h2>
-
+  <h2 className={styles.title}>Edit Bondsman</h2>
+</div>
       <div className={styles.profileSection}>
         <div className={styles.profileImageContainer}>
           <div className={styles.profileImageWrapper}>
