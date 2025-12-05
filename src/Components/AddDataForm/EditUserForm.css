@@ -253,3 +253,437 @@
   font-weight: 600;
   text-align: center;
 }
+.editIcon {
+  position: absolute;
+  top: 85px;
+  right: -2px;
+  background: #0001fc;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.editIcon:hover {
+  transform: scale(1.1);
+  background: #6b7280;
+}
+
+.fileInput {
+  display: none;
+}
+
+/* ================== FORM =================== */
+
+.formWrapper {
+  width: 50%;
+  margin: auto;
+}
+
+.formGroup {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.formGroup input,
+.formGroup textarea {
+  border: 1px solid #d5d5d5;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  outline: none;
+  font-family: Lexend;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+
+}
+
+.saveBtn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #0001FC;
+  color: white;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px;
+  font-family: Lexend;
+  transition: 0.3s;
+}
+
+.saveBtn:hover {
+  background: #0000a1;
+}
+
+/* ================== RESPONSIVE =================== */
+
+@media (max-width: 768px) {
+  .pageWrapper {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .formWrapper {
+    width: 100%;
+  }
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: #232323;
+  text-align: center;   /* 👈 Add this */
+}
+
+.form-input::placeholder {
+  color: #3A3737CC;
+  font-size:"12px";
+  font-weight: 400;
+}
+.saveBtn:disabled {
+  background-color:#6B7280;
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: #fff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Title is centered */
+  position: relative;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.backButton {
+  position: absolute;
+  left: 250px;   /* always stays left, no shifting */
+  height: 22px;
+  width: 16px;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+
+/* Add these styles to your existing AddUserForm.module.css */
+
+/* Phone Input Container */
+.phoneInputContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Phone Number Input */
+.phoneNumberInput {
+  flex: 1;
+  border: 1px solid #d5d5d5;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 14px;
+  font-family: 'Lexend', sans-serif;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.phoneNumberInput:focus {
+  border-color: #0001fc;
+  box-shadow: 0px 0px 4px rgba(0, 1, 252, 0.3);
+}
+
+.phoneNumberInput::placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+/* Phone Helper Text */
+.phoneHelper {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+  font-family: 'Lexend', sans-serif;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .phoneInputContainer {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .phoneInputContainer > * {
+    width: 100%;
+  }
+}
+.phoneContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 7px 7px;
+  border-radius: 8px;
+  background: white;
+ padding-left: 15px;
+}
+
+.countrySelector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+.flag {
+  font-size: 20px;
+}
+
+.code {
+  font-size: 15px;
+}
+
+.arrow {
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.phoneInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 15px;
+  margin-left: -10px;
+}
+
+.dropdown {
+  margin-top: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background: #f2f2f2;
+}
+
+
+.flagContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* elements ke beech thodi spacing */
+}
+
+.flag {
+  display: flex;
+  align-items: center;
+}
+
+.code {
+  font-size: 14px;
+}
+
+.arrow img {
+  display: block;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.required {
+  color: red;
+}
+
+.phone-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: visible;
+  position: relative;
+  background: #fff;
+}
+
+.phone-left {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  gap: 6px;
+}
+
+.phone-left .dial {
+  font-size: 14px;
+  color: #333;
+}
+
+.phone-input {
+  border: none;
+  padding: 10px;
+  outline: none;
+  font-size: 14px;
+  width: 100% !important;
+}
+
+.phone-input::placeholder {
+  color: #aaa;
+}
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 6px;
+  margin-top: 4px;
+  z-index: 50;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.dropdown-item {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* Input Group */
+.input-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  font-size: 15px;
+  color: #232323;
+}
+
+.required {
+  color: red;
+}
+
+/* Phone Box */
+.phone-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #d5d5d5;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #fff;
+  position: relative;
+  gap: 0px;
+}
+
+/* LEFT FLAG + CODE */
+.phone-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  padding-right: 10px;
+}
+
+.phone-left img {
+  display: block;
+}
+
+.dial {
+  font-size: 15px;
+}
+
+/* INPUT */
+.phone-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 15px;
+  padding-left: 8px;
+}
+
+.phone-input::placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+/* DROPDOWN */
+.dropdown {
+  margin-top: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  z-index: 99;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.15);
+}
+
+/* DROPDOWN ITEM */
+.dropdown-item {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: #f2f2f2;
+}

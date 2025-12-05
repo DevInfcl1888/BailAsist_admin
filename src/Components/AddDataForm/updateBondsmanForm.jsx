@@ -1,18 +1,39 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef ,useEffect } from "react";
 import styles from "./AddUserForm.module.css";
 import Sidebar from "../Sidebar/Sidebare";
 import { useLocation } from "react-router-dom";
 import axiosInstace from "../../utils/axiosInstance";
 import Swal from "sweetalert2";
+import ReactCountryFlag from "react-country-flag";
+import countries from './countrycode.json';
+
+// const countries = [
+//   { name: "United States", code: "US", dial_code: "+1", flag: "🇺🇸" },
+//   { name: "India", code: "IN", dial_code: "+91", flag: "🇮🇳" },
+//   { name: "United Kingdom", code: "GB", dial_code: "+44", flag: "🇬🇧" },
+//   { name: "Canada", code: "CA", dial_code: "+1", flag: "🇨🇦" }
+// ];
 
 const UpdateBondsman = () => {
   const { state } = useLocation();
   const user = state?.bondsman;
-
+ 
   const [profileImage, setProfileImage] = useState(null);
   const [profilePreview, setProfilePreview] = useState(null);
     const [loading, setLoading] = useState(false);
-  
+  const [selectedCountry, setSelectedCountry] = useState(countries[233]);
+const [showDropdown, setShowDropdown] = useState(false);
+const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
 
   const [formData, setFormData] = useState({
     name: user?.name ?? "",
@@ -21,32 +42,59 @@ const UpdateBondsman = () => {
     cellPhone: user?.phoneNo ?? "",
   });
 
+
+
   // ---------------- HANDLE UPDATE API ----------------
-  const handleUpload = async (e) => {
-    e.preventDefault();
-    if (loading) return ;
-    setLoading(true)
+ const handleUpload = async (e) => {
+  e.preventDefault();
+  if (loading) return;
+  setLoading(true);
 
-    try {
-      const res = await axiosInstace.post(
-        `/api/v1/admin/updateBondsmanDetails/${user?._id}`,
-        {
-          name: formData.name,
-          email: formData.email,
-          phoneNo: formData.phone, // API me phoneNo required hai
-        }
-      );
-
-      console.log("Update successful", res.data);
-      Swal.fire("Updated!", "User has been Updated.", "success");
-
-    } catch (error) {
-      console.log(error);
-    Swal.fire("Error", "Upload failed. Please try again.", "error");
-    }
-    setLoading(false)
+  // ---- FINAL PAYLOAD OBJECT ----
+  const payload = {
+    name: formData.name,
+    email: formData.email,
+    phoneNo: formData.cellPhone,    // Phone number
+    countryCode: selectedCountry.dial_code,   // +1 , +91 , +987 etc.
   };
+
+  console.log("📤 FINAL PAYLOAD SENDING TO API:", payload);
+
+  try {
+    const res = await axiosInstace.post(
+      `/api/v1/admin/updateBondsmanDetails/${user?._id}`,
+      payload
+    );
+
+    console.log("✅ Update successful", res.data);
+    Swal.fire("Updated!", "User has been Updated.", "success");
+
+  } catch (error) {
+    console.log("❌ API ERROR:", error);
+    Swal.fire("Error", "Upload failed. Please try again.", "error");
+  }
+
+  setLoading(false);
+};
+
   // ----------------------------------------------------
+  useEffect(() => {
+  if (user?.countryCode) {
+    const found = countries.find(
+      (c) => c.dial_code === user.countryCode
+    );
+    if (found) setSelectedCountry(found);
+  }
+
+  // cellPhone me phoneNo set krdo
+  if (user?.phoneNo) {
+    setFormData((prev) => ({
+      ...prev,
+      cellPhone: user.phoneNo
+    }));
+  }
+}, [user]);
+
 
   const handleInputChange = (e) => {
     setFormData({
@@ -78,15 +126,18 @@ const UpdateBondsman = () => {
       <Sidebar />
       
   <div className={styles.header}>
-  <img
-    src="/back-button.png"
-    alt="Back"
-    className={styles.backButton}
-    onClick={() => window.history.back()}
-  />
+  {!isMobile && (
+    <img
+      src="/back-button.png"
+      alt="Back"
+      className={styles.backButton}
+      onClick={() => window.history.back()}
+    />
+  )}
 
   <h2 className={styles.title}>Update Bondsman Info</h2>
 </div>
+
       <div className={styles.profileSection}>
         <div className={styles.profileImageContainer}>
           <div className={styles.profileImageWrapper}>
@@ -137,16 +188,57 @@ const UpdateBondsman = () => {
           />
         </div>
 
-        <div className={styles.formGroup}>
-          <label>Cell Phone *</label>
-          <input
-            type="text"
-            placeholder="*******"
-            name="cellPhone"
-            onChange={handleInputChange}
-            value={formData.cellPhone}
-          />
+      <div className={styles.formGroup}>
+  <label>Cell Phone *</label>
+
+  <div className={styles.phoneContainer}>
+    <div
+      className={styles.countrySelector}
+      onClick={() => setShowDropdown(!showDropdown)}
+    >
+<div className={styles.flag}>
+  <ReactCountryFlag
+    countryCode={selectedCountry.code}  // ex: GB
+    svg
+    style={{
+      width: "22px",
+      height: "22px",
+      borderRadius: "4px",
+    }}
+  />
+</div>
+      <span className={styles.code}>{selectedCountry.dial_code}</span>
+      <span className={styles.arrow}><img src="/Vector (7).png" style={{height:"11px" , width:"7px"}} /></span>
+    </div>
+    <input
+      type="text"
+      placeholder="(000) 000-0000"
+      name="cellPhone"
+      onChange={handleInputChange}
+      value={formData.cellPhone}
+      className={styles.phoneInput}
+      style={{border:"none"}}
+    />
+  </div>
+
+  {showDropdown && (
+    <div className={styles.dropdown}>
+      {countries.map((c) => (
+        <div
+          key={c.code}
+          className={styles.dropdownItem}
+          onClick={() => {
+            setSelectedCountry(c);
+            setShowDropdown(false);
+          }}
+        >
+          {c.flag} {c.name} ({c.dial_code})
         </div>
+      ))}
+    </div>
+  )}
+</div>
+
 
         <button
           className={styles.saveBtn}

@@ -105,8 +105,7 @@
 
 .formGroup input:focus,
 .formGroup textarea:focus {
-  border-color: #0001fc;
-  box-shadow: 0px 0px 4px rgba(0, 1, 252, 0.3);
+
 }
 
 .saveBtn {
@@ -233,5 +232,124 @@
   
   .phoneInputContainer > * {
     width: 100%;
+  }
+}
+.phoneContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 7px 7px;
+  border-radius: 8px;
+  background: white;
+ padding-left: 15px;
+}
+
+.countrySelector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+  font-weight: 600;
+}
+
+.flag {
+  font-size: 20px;
+}
+
+.code {
+  font-size: 15px;
+}
+
+.arrow {
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.phoneInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 15px;
+  margin-left: -10px;
+}
+
+.dropdown {
+  margin-top: 8px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background: #f2f2f2;
+}
+
+
+.flagContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* elements ke beech thodi spacing */
+}
+
+.flag {
+  display: flex;
+  align-items: center;
+}
+
+.code {
+  font-size: 14px;
+}
+
+.arrow img {
+  display: block;
+}
+
+/* 📱 MOBILE VIEW FIX — side spacing + proper centering */
+@media (max-width: 768px) {
+
+  .pageWrapper {
+    margin-left: 0 !important;
+    padding: 15px !important;
+    width: 90% !important;
+  }
+
+  .header {
+    padding: 0 10px;
+  }
+
+  .title {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .formWrapper {
+    width: 100% !important;
+    padding: 0 10px !important; /* ⭐ side margins for form */
+  }
+
+  .profileSection {
+    padding: 0 10px;
+    justify-content: center;
+  }
+
+  .phoneContainer {
+    width: 93% !important;
+  }
+
+  .dropdown {
+    width: 100% !important;
+  }
+
+  .saveBtn {
+    width: 100%;
+    margin-top: 15px;
   }
 }

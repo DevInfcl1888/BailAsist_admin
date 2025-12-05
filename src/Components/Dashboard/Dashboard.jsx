@@ -151,7 +151,6 @@
 // }
 
 // export default Dashboard;
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstace from "../../utils/axiosInstance";
@@ -166,10 +165,14 @@ function Dashboard() {
   const [showAddBondsman, setShowAddBondsman] = useState(false);
   const [currentType, setCurrentType] = useState("");
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState({ allUsers: [] });
-  const [usersCount, setUsersCount] = useState({ totalUsers: 0 });
-  const [bondsman, setBondsman] = useState({ listAllBondsman: [] });
+  const [users, setUsers] = useState([]);
+  const [usersCount, setUsersCount] = useState(0);
+  const [bondsman, setBondsman] = useState([]);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+const [userSearchTerm, setUserSearchTerm] = useState("");
+const [bondsmanSearchTerm, setBondsmanSearchTerm] = useState("");
+
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
   const [dragActive, setDragActive] = useState(false);
@@ -180,26 +183,20 @@ function Dashboard() {
 
   const navigate = useNavigate();
 
-  const fetchData = async () => {
+  // Fetch data with optional search
+  const fetchData = async (search = "") => {
     try {
       setLoading(true);
-      // Swal.fire({
-      //   title: "Loading...",
-      //   allowOutsideClick: false,
-      //   didOpen: () => Swal.showLoading(),
-      // });
 
       const [bondsmanRes, usersRes, usersData] = await Promise.all([
-        axiosInstace.get("/api/v1/admin/getBondsmanDetails"),
-        axiosInstace.get("/api/v1/admin/getTotalUsersCount"),
-        axiosInstace.get("/api/v1/admin/getAllUsers"),
+        axiosInstace.get("/api/v1/admin/getBondsmanDetails", { params: { search } }),
+        axiosInstace.get("/api/v1/admin/getTotalUsersCount", { params: { search } }),
+        axiosInstace.get("/api/v1/admin/getAllUsers", { params: { search } }),
       ]);
 
-      setUsers(usersData);
-      setUsersCount(usersRes);
-      setBondsman(bondsmanRes);
-
-      Swal.close();
+      setBondsman(bondsmanRes?.data?.isBondsmanAllExist || []);
+      setUsers(usersData?.data?.User || []);
+      setUsersCount(usersRes?.data?.count || 0);
     } catch (err) {
       setError(err?.response?.data?.message || "Something went wrong");
     } finally {
@@ -207,9 +204,26 @@ function Dashboard() {
     }
   };
 
+  // Initial fetch
   useEffect(() => {
     fetchData();
   }, []);
+
+  // Debounce search
+ useEffect(() => {
+  const delay = setTimeout(() => {
+    fetchData(userSearchTerm);
+  }, 500);
+  return () => clearTimeout(delay);
+}, [userSearchTerm]);
+
+useEffect(() => {
+  const delay = setTimeout(() => {
+    fetchData(bondsmanSearchTerm);
+  }, 500);
+  return () => clearTimeout(delay);
+}, [bondsmanSearchTerm]);
+
 
   const handleAddClick = (type) => {
     setCurrentType(type);
@@ -222,18 +236,14 @@ function Dashboard() {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-      
-      // Create preview for images
-      if (selectedFile.type.startsWith('image/')) {
+
+      if (selectedFile.type.startsWith("image/")) {
         const reader = new FileReader();
-        reader.onload = (e) => {
-          setFilePreview(e.target.result);
-        };
+        reader.onload = (e) => setFilePreview(e.target.result);
         reader.readAsDataURL(selectedFile);
       } else {
         setFilePreview(null);
       }
-      
       setUploadStatus("");
     }
   };
@@ -244,48 +254,37 @@ function Dashboard() {
     if (e.dataTransfer.files?.length) {
       const selectedFile = e.dataTransfer.files[0];
       setFile(selectedFile);
-      
-      // Create preview for images
-      if (selectedFile.type.startsWith('image/')) {
+      if (selectedFile.type.startsWith("image/")) {
         const reader = new FileReader();
-        reader.onload = (e) => {
-          setFilePreview(e.target.result);
-        };
+        reader.onload = (e) => setFilePreview(e.target.result);
         reader.readAsDataURL(selectedFile);
       } else {
         setFilePreview(null);
       }
-      
       setUploadStatus("");
     }
   };
 
- const handleUploadClick = async () => {
-  if (!file) {
-    Swal.fire("Error", "Please select a file first", "error");
-    return;
-  }
+  const handleUploadClick = async () => {
+    if (!file) return Swal.fire("Error", "Please select a file first", "error");
 
-  try {
-    setUploadStatus("uploading");
+    try {
+      setUploadStatus("uploading");
 
-    const formData = new FormData();
-    formData.append("adImg", file); // 👈 correct name
+      const formData = new FormData();
+      formData.append("adImg", file);
 
-    const res = await axiosInstace.post(
-      "/api/v1/admin/uploadAds", 
-      formData,
-      { headers: { "Content-Type": "multipart/form-data" } }
-    );
+      await axiosInstace.post("/api/v1/admin/uploadAds", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-    setUploadStatus("completed");
-    Swal.fire("Success", "File uploaded successfully!", "success");
-  } catch (err) {
-    setUploadStatus("");
-    Swal.fire("Error", "Upload failed. Please try again.", "error");
-  }
-};
-
+      setUploadStatus("completed");
+      Swal.fire("Success", "File uploaded successfully!", "success");
+    } catch (err) {
+      setUploadStatus("");
+      Swal.fire("Error", "Upload failed. Please try again.", "error");
+    }
+  };
 
   const handleRemoveFile = () => {
     setFile(null);
@@ -294,147 +293,108 @@ function Dashboard() {
   };
 
   return (
-    <>
-      <div style={{ backgroundColor: "#F9F9F9", minHeight: "100vh" }}>
-        {/* Mobile Toggle Button */}
+    <div style={{ backgroundColor: "#F9F9F9", minHeight: "100vh" }}>
+      {/* Sidebar */}
+      <div className={`${styles.leftSideBar} ${isSideOpen ? styles.open : ""}`}>
+        <Sidebar />
+      </div>
+      {isSideOpen && <div className={styles.overlay} onClick={toggleSidebar}></div>}
 
-        {/* Sidebar */}
-        <div className={`${styles.leftSideBar} ${isSideOpen ? styles.open : ""}`}>
-          <Sidebar />
+      <div className={styles.dashboard}>
+        <h1>Admin Dashboard</h1>
+
+        <div className={styles.cards}>
+          <div className={`${styles.card} ${styles.blueCard}`}>
+            Total Bondsman <span>{bondsman.length}</span>
+          </div>
+          <div className={`${styles.card} ${styles.greenCard}`}>
+            Total Users <span>{usersCount}</span>
+          </div>
         </div>
 
-        {/* Overlay when sidebar open */}
-        {isSideOpen && <div className={styles.overlay} onClick={toggleSidebar}></div>}
-
-        <div className={styles.dashboard}>
-          <h1>Admin Dashboard</h1>
-
-          <div className={styles.cards}>
-            <div className={`${styles.card} ${styles.blueCard}`}>
-              Total Bondsman <span>{bondsman?.data?.isBondsmanAllExist?.length || 0}</span>
-            </div>
-            <div className={`${styles.card} ${styles.greenCard}`}>
-              Total Users <span>{usersCount?.data?.count || 0}</span>
-            </div>
-          </div>
-
-          <div>
-            <div className={styles.adUpload}>
-              <h2>Advertising</h2>
-
-              <div
-                className={`${styles.uploadBox} ${
-                  dragActive ? styles.activeDrag : ""
-                }`}
-                onDrop={handleDragDrop}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setDragActive(true);
-                }}
-                onDragLeave={() => setDragActive(false)}
-              >
-                {filePreview ? (
-                  <div className={styles.previewContainer}>
-                    <img 
-                      src={filePreview} 
-                      alt="Preview" 
-                      className={styles.previewImage}
-                    />
-                    <button 
-                      className={styles.removeButton}
-                      onClick={handleRemoveFile}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ) : file ? (
-                  <div className={styles.fileSelected}>
-                    <p>📄 {file.name}</p>
-                    <button 
-                      className={styles.removeButton}
-                      onClick={handleRemoveFile}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ) : (
-                  <label htmlFor="uploadFile" className={styles.uploadContent}>
-                    <img src="/upload.png" alt="Upload" height="89" width="89"/>
-                    <h3 style={{fontSize:"28px" , fontWeight:600 , fontFamily:"Lexend" , cursor:"pointer"}}>Drag & Drop</h3>
-                    <p style={{fontSize:"22px" , cursor:"pointer"}}>or select files from device</p>
-                    <span style={{fontSize:"16px" ,cursor:"pointer"}}>max. 50MB</span>
-                  </label>
-                )}
-                
-                <input
-                  id="uploadFile"
-                  type="file"
-                  accept="application/pdf,image/jpeg,image/png,image/jpg"
-                  onChange={handleFileUpload}
-                  className={styles.hiddenFile}
-                />
+        {/* Advertising */}
+        <div className={styles.adUpload}>
+          <h2>Advertising</h2>
+          <div
+            className={`${styles.uploadBox} ${dragActive ? styles.activeDrag : ""}`}
+            onDrop={handleDragDrop}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragActive(true);
+            }}
+            onDragLeave={() => setDragActive(false)}
+          >
+            {filePreview ? (
+              <div className={styles.previewContainer}>
+                <img src={filePreview} alt="Preview" className={styles.previewImage} />
+                <button className={styles.removeButton} onClick={handleRemoveFile}>✕</button>
               </div>
-
-              {/* Upload Button */}
-              {file && !uploadStatus && (
-                <button 
-                  className={styles.uploadBtn}
-                  onClick={handleUploadClick}
-                >
-                  Upload File
-                </button>
-              )}
-
-              {/* Upload Status */}
-              {uploadStatus === "uploading" && (
-                <div className={styles.uploadStatus}>
-                  <p>Uploading...</p>
-                </div>
-              )}
-
-              {uploadStatus === "completed" && (
-                <div className={styles.fileInfo}>
-                  <p>📄 {file.name}</p>
-                  <span className={styles.status}>✔ Completed</span>
-                </div>
-              )}
-            </div>
+            ) : file ? (
+              <div className={styles.fileSelected}>
+                <p>📄 {file.name}</p>
+                <button className={styles.removeButton} onClick={handleRemoveFile}>✕</button>
+              </div>
+            ) : (
+              <label htmlFor="uploadFile" className={styles.uploadContent}>
+                <img src="/upload.png" alt="Upload" height="89" width="89" />
+                <h3 style={{ fontSize: 28, fontWeight: 600 }}>Drag & Drop</h3>
+                <p style={{ fontSize: 22 }}>or select files from device</p>
+                <span style={{ fontSize: 16 }}>max. 50MB</span>
+              </label>
+            )}
+            <input
+              id="uploadFile"
+              type="file"
+              accept="application/pdf,image/jpeg,image/png,image/jpg"
+              onChange={handleFileUpload}
+              className={styles.hiddenFile}
+            />
           </div>
 
-          <div className={styles.tableContainer}>
-            {showAddUser ? (
-              <AddUser candidate={currentType} />
-            ) : (
-              <DataTable
-                candidate={"User"}
-                listName="User List"
-                data={users?.data?.User}
-                error={error}
-                loading={loading}
-                onAddClick={() => handleAddClick("User")}
-                fetchData={fetchData}
-                deletAPI={"/api/v1/admin/deleteUserProfile"}
-              />
-            )}
+          {file && !uploadStatus && (
+            <button className={styles.uploadBtn} onClick={handleUploadClick}>
+              Upload File
+            </button>
+          )}
+          {uploadStatus === "uploading" && <p>Uploading...</p>}
+          {uploadStatus === "completed" && <p>✔ Completed</p>}
+        </div>
 
-            {showAddBondsman ? (
-              <AddUser candidate={currentType} />
-            ) : (
-              <DataTable
-                candidate={"Bondsman"}
-                listName="Bondsman User List"
-                data={bondsman?.data?.isBondsmanAllExist}
-                error={error}
-                loading={loading}
-                onAddClick={() => handleAddClick("Bondsman")}
-                fetchData={fetchData}
-                deletAPI={"/api/v1/admin/deleteBondsmanProfile"}
-              />
-            )}
-          </div> 
+        {/* DataTable */}
+        <div className={styles.tableContainer}>
+          {showAddUser ? (
+            <AddUser candidate={currentType} />
+          ) : (
+            <DataTable
+              candidate="User"
+              listName="User List"
+              data={users}
+              loading={loading}
+              error={error}
+              fetchData={fetchData}
+              deletAPI="/api/v1/admin/deleteUserProfile"
+              searchTerm={userSearchTerm}
+  setSearchTerm={setUserSearchTerm}
+            />
+          )}
+          {showAddBondsman ? (
+            <AddUser candidate={currentType} />
+          ) : (
+            <DataTable
+              candidate="Bondsman"
+              listName="Bondsman User List"
+              data={bondsman}
+              loading={loading}
+              error={error}
+              fetchData={fetchData}
+              deletAPI="/api/v1/admin/deleteBondsmanProfile"
+             searchTerm={bondsmanSearchTerm}
+  setSearchTerm={setBondsmanSearchTerm}
+            />
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
