@@ -151,6 +151,8 @@
 // }
 
 // export default Dashboard;
+
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstace from "../../utils/axiosInstance";
@@ -357,7 +359,16 @@ useEffect(() => {
             </button>
           )}
           {uploadStatus === "uploading" && <p>Uploading...</p>}
-          {uploadStatus === "completed" && <p>✔ Completed</p>}
+       {uploadStatus === "completed" && file && (
+  <div style={{ display: "flex", padding: "110px", paddingTop: "11px", justifyContent: "space-between", marginTop: "10px", fontWeight: 600, color: "#000000" }}>
+    <span>{file.name}</span>
+    
+    <span style={{ display: "flex", alignItems: "center" }}>
+      <img src="/tick-circle.png" style={{ height: "26px", width: "24px", marginRight: "6px" }} alt="Completed" />
+      Completed
+    </span>
+  </div>
+)}
         </div>
 
         {/* DataTable */}

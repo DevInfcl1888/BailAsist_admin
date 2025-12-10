@@ -265,4 +265,25 @@ h1 {
   margin-top:70px;
   display: block;
 }
+.fileStatusContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  background: #f1f1f1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
 
+.fileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 70%; /* adjust if needed */
+}
+
+.fileStatus {
+  font-weight: 600;
+  color: green;
+}

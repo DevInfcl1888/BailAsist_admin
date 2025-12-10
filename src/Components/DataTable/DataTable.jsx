@@ -107,7 +107,7 @@ const DataTable = ({
         </div>
 
         <table className={styles.bondsmanTable}>
-          <thead>
+          <thead className={styles.TableHead}>
             <tr>
               <th>Avatar</th>
               <th>Username</th>
@@ -129,17 +129,20 @@ const DataTable = ({
                     </td>
                     <td>
                       {(() => {
-                        const fullName = `${capitalizeFirst(user.firstName || user.name)} ${
-                          capitalizeFirst(user.middleName) || ""
-                        } ${capitalizeFirst(user.lastName)}`.trim();
+                        const fullName = `${capitalizeFirst(user?.firstName || user?.name)} ${
+                          capitalizeFirst(user?.middleName) || ""
+                        } ${capitalizeFirst(user?.lastName)}`.trim();
                         return fullName.length > 10 ? fullName.slice(0, 10) + "..." : fullName;
                       })()}
                     </td>
-                    <td>{user.email}</td>
-                    <td>{user.flag} {user.countryCode}{user.phoneNo}</td>
+                    <td>{user?.email}</td>
+<td>
+  {user.flag} {user.countryCode}
+  {user.phoneNo ? (user.phoneNo.length > 15 ? user.phoneNo.slice(0, 15) + "." : user.phoneNo) : "-"}
+</td>
                     <td>
                       <span className={user?.isActive ? styles.statusActive : styles.statusNonActive}>
-                        {user.isActive ? "Active" : "Inactive"}
+                        {user?.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
                     <td>

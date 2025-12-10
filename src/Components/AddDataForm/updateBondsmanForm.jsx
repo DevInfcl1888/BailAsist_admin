@@ -17,7 +17,10 @@ import countries from './countrycode.json';
 const UpdateBondsman = () => {
   const { state } = useLocation();
   const user = state?.bondsman;
- 
+ const location = useLocation();
+
+
+
   const [profileImage, setProfileImage] = useState(null);
   const [profilePreview, setProfilePreview] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -68,6 +71,7 @@ useEffect(() => {
 
     console.log("✅ Update successful", res.data);
     Swal.fire("Updated!", "User has been Updated.", "success");
+    
 
   } catch (error) {
     console.log("❌ API ERROR:", error);
@@ -102,6 +106,14 @@ useEffect(() => {
       [e.target.name]: e.target.value,
     });
   };
+  const handleCellPhoneChange = (e) => {
+  const onlyNums = e.target.value.replace(/\D/g, ""); 
+  setFormData({
+    ...formData,
+    cellPhone: onlyNums
+  });
+};
+
 
   const isFormValid =
     formData.name.trim() !== "" &&
@@ -135,7 +147,7 @@ useEffect(() => {
     />
   )}
 
-  <h2 className={styles.title}>Update Bondsman Info</h2>
+  <h2 className={styles.title}>Edit Bondsman </h2>
 </div>
 
       <div className={styles.profileSection}>
@@ -181,6 +193,7 @@ useEffect(() => {
           <label>Email *</label>
           <input
             type="email"
+            maxLength={30} 
             placeholder="Enter Email"
             name="email"
             onChange={handleInputChange}
@@ -211,11 +224,12 @@ useEffect(() => {
       <span className={styles.arrow}><img src="/Vector (7).png" style={{height:"11px" , width:"7px"}} /></span>
     </div>
     <input
-      type="text"
+      type="tel"
       placeholder="(000) 000-0000"
       name="cellPhone"
-      onChange={handleInputChange}
-      value={formData.cellPhone}
+  onChange={handleCellPhoneChange}
+      value={formData.cellPhone}      
+       maxLength={15} 
       className={styles.phoneInput}
       style={{border:"none"}}
     />

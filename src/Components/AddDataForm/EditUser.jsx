@@ -347,7 +347,13 @@ const EditUserForm = () => {
     [e.target.name]: e.target.value,   // ← correct syntax
   });
 };
-
+  const handleCellPhoneChange = (e) => {
+  const onlyNums = e.target.value.replace(/\D/g, ""); 
+  setFormData({
+    ...formData,
+    cellPhone: onlyNums
+  });
+};
 
   // --------------------------
   // UPDATE API CALL
@@ -487,6 +493,8 @@ const updateUser = async () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                            maxLength={30} 
+
                 placeholder="Enter Email Address"
                 className="form-input"
                 type="email"
@@ -519,8 +527,9 @@ const updateUser = async () => {
     <input
       name="cellPhone"
       value={formData.cellPhone}
-      onChange={handleChange}
+      onChange={handleCellPhoneChange}
       className="phone-input"
+      maxLength={15}
       placeholder="Enter Phone Number"
     />
 

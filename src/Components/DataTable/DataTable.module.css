@@ -336,3 +336,74 @@ margin: 25px;
   
   margin: 0 auto; /* <-- centers the search box horizontally */
 }
+
+/* 🔥 FIX TABLE HEADER — Always stay at top */
+.bondsmanTable thead th {
+  position: sticky;
+  top: 0;
+  background-color: #D9D9D9 !important;
+  z-index: 100;
+}
+
+.TableHead {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;  /* 🔒 Prevent column width change → header stable */
+}
+
+.bondsmanTable thead th {
+  position: sticky;
+  top: 0;
+  background-color: #D9D9D9 !important;
+  z-index: 100;
+}
+/* FIXED: Prevent column width change → header stable */
+.bondsmanTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;  /* 🔒 FIXED: Prevent column widths from changing based on content */
+}
+
+/* FIXED: Assign specific widths to columns to keep them stable */
+.bondsmanTable th {
+  background-color: #D9D9D9;
+  text-align: left;
+  font-weight: 400;
+  white-space: nowrap;
+  padding: 12px 16px;
+  font-size: 18px;
+}
+
+.bondsmanTable th:nth-child(1) { width: 8%; } /* Avatar */
+.bondsmanTable th:nth-child(2) { width: 22%; } /* Username */
+.bondsmanTable th:nth-child(3) { width: 25%; } /* Email */
+.bondsmanTable th:nth-child(4) { width: 18%; } /* Phone */
+.bondsmanTable th:nth-child(5) { width: 12%; } /* Status */
+.bondsmanTable th:nth-child(6) { width: 15%; } /* Action */
+
+.bondsmanTable td {
+  padding: 12px 16px;
+  border-top: 1px solid #eee;
+  vertical-align: middle;
+  /* FIXED: Inherit widths from th for stability */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bondsmanTable td:nth-child(1) { width: 8%; } /* Avatar */
+.bondsmanTable td:nth-child(2) { width: 22%; } /* Username */
+.bondsmanTable td:nth-child(3) { width: 25%; } /* Email */
+.bondsmanTable td:nth-child(4) { width: 18%; } /* Phone */
+.bondsmanTable td:nth-child(5) { width: 12%; } /* Status */
+.bondsmanTable td:nth-child(6) { width: 15%; } /* Action */
+
+/* 🔥 FIX TABLE HEADER — Always stay at top */
+.bondsmanTable thead th {
+  position: sticky;
+  top: 0;
+  background-color: #D9D9D9 !important;
+  z-index: 100;
+}
+
+/* Mobile adjustments */
