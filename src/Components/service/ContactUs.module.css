@@ -113,7 +113,7 @@ border-radius: 6px;
 cursor: pointer;
 box-shadow: 0 6px 14px rgba(0, 51, 255, 0.2);
 transition: 0.2s;
-width: 140px; /* same width */
+width: 160px; /* same width */
 text-align: center;
 }
 
@@ -362,7 +362,8 @@ filter: brightness(0.95);
   box-shadow: 0 6px 18px rgba(12, 20, 30, 0.08);
   padding: 24px 28px;
   box-sizing: border-box;
-  margin-left: 0; /* wrapper ke padding se adjust ho raha hai */
+  margin-left: 0; 
+  height: 100%;
 }
 
 /* Sidebar */

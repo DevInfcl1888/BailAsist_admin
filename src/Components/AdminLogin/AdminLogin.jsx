@@ -16,20 +16,18 @@ function AdminLogin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!username || !password) return; // Prevent submit if fields empty
     setLoading(true);
     setError("");
 
-    // Swal.fire({
-    //   title: "Loading...",
-    //   text: "Please wait",
-    //   allowOutsideClick: false,
-    //   didOpen: () => {
-    //     Swal.showLoading();
-    //   },
-    // });
-
     try {
-      const res = await axiosInstace.post(`api/v1/admin/adminLogin`, {
+      Swal.fire({
+        title: "Loading...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      const res = await axiosInstace.post("/api/v1/admin/adminLogin", {
         username,
         password,
       });
@@ -40,92 +38,96 @@ function AdminLogin() {
       localStorage.setItem("refreshToken", res.data.refreshToken);
 
       navigate("/dashboard");
-   } catch (error) {
-  Swal.close();
+    } catch (err) {
+      Swal.close();
+      console.log("Full Error:", err);
+      console.log("Response:", err.response);
+      console.log("Response Data:", err.response?.data);
 
-  // Always show "Wrong ID or Password" on invalid login
-  const message =
-    error.response?.status === 401
-      ? "Wrong ID or Password"
-      : error.response?.data?.message || "Something went wrong. Please try again.";
+      // Correctly read error message from Axios
+      const message = err.response?.data?.message || "Something went wrong";
+      setError(message);
 
-  setError(message);
-
-  Swal.fire({
-    icon: "error",
-    title: "Login Failed",
-    text: message,
-  });
-
-  console.log("Error:", error);
-} finally {
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: message,
+      });
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <>
-      <div className={styles.container}>
-        <img src={logo} alt="Admin Logo" className={styles.adminLogo} />
+    <div className={styles.container}>
+      <img src={logo} alt="Admin Logo" className={styles.adminLogo} />
 
-        <div className={styles.adminLoginContainer}>
-          <h1>Admin Login</h1>
+      <div className={styles.adminLoginContainer}>
+        <h1>Admin Login</h1>
 
-          <div className={styles.loginBox}>
-            <p>Please fill in your unique admin login details below</p>
+        <div className={styles.loginBox}>
+          <p>Please fill in your unique admin login details below</p>
 
-            {/* SHOW ERROR BELOW TITLE */}
-            {error && <p className={styles.errorMessage}>{error}</p>}
+          {error && (
+            <p
+              className={styles.errorMessage}
+              style={{ color: "#f30e0eff", fontWeight: 600 }}
+            >
+              {error}
+            </p>
+          )}
 
-            <form onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
-                <label>
-                  Username <span style={{ color: "red" }}>*</span>
-                </label>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+              <label>
+                Username <span style={{ color: "red" }}>*</span>
+              </label>
+              <input
+                type="text"
+                maxLength={10}
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>
+                Password <span style={{ color: "red" }}>*</span>
+              </label>
+              <div className={styles.inputWrapper}>
                 <input
-                  type="text"
+                  type={showPassword ? "text" : "password"}
                   maxLength={10}
-                  placeholder="Enter your username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>
-                  Password <span style={{ color: "red" }}>*</span>
-                </label>
-
-                <div className={styles.inputWrapper}>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    maxLength={10}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                <span
+                  className={styles.toggleEye}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  <img
+                    src={showPassword ? "/open-eye.png" : "/close-eye.png"}
+                    alt={showPassword ? "Hide Password" : "Show Password"}
+                    style={{ width: "28px", height: "22px", cursor: "pointer" }}
                   />
-
-                  <span
-                    className={styles.toggleEye}
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    <img
-                      src={showPassword ? "/open-eye.png" : "/close-eye.png"}
-                      alt={showPassword ? "Hide Password" : "Show Password"}
-                      style={{ width: "28px", height: "22px", cursor: "pointer" }}
-                    />
-                  </span>
-                </div>
+                </span>
               </div>
+            </div>
 
-              <button type="submit" className={styles.button}>
-                Submit
-              </button>
-            </form>
-          </div>
+            <button
+              type="submit"
+              className={styles.button}
+              disabled={!username || !password || loading}
+              style={{ opacity: !username || !password || loading ? 0.6 : 1 }}
+            >
+              {loading ? "Submitting..." : "Submit"}
+            </button>
+          </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -152,7 +152,6 @@
 
 // export default Dashboard;
 
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstace from "../../utils/axiosInstance";
@@ -166,71 +165,137 @@ function Dashboard() {
   const [showAddUser, setShowAddUser] = useState(false);
   const [showAddBondsman, setShowAddBondsman] = useState(false);
   const [currentType, setCurrentType] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState({ users: true, bondsman: true });
   const [users, setUsers] = useState([]);
   const [usersCount, setUsersCount] = useState(0);
   const [bondsman, setBondsman] = useState([]);
-  const [error, setError] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-const [userSearchTerm, setUserSearchTerm] = useState("");
-const [bondsmanSearchTerm, setBondsmanSearchTerm] = useState("");
+  const [error, setError] = useState({ users: "", bondsman: "" });
+  const [userSearchTerm, setUserSearchTerm] = useState("");
+  const [bondsmanSearchTerm, setBondsmanSearchTerm] = useState("");
 
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
   const [dragActive, setDragActive] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState(""); // "uploading", "completed", ""
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const [isSideOpen, setIsSideOpen] = useState(false);
   const toggleSidebar = () => setIsSideOpen(!isSideOpen);
 
   const navigate = useNavigate();
 
-  // Fetch data with optional search
-  const fetchData = async (search = "") => {
+  // Separate fetch functions for users and bondsman
+  const fetchUsers = async (search = "") => {
     try {
-      setLoading(true);
-
-      const [bondsmanRes, usersRes, usersData] = await Promise.all([
-        axiosInstace.get("/api/v1/admin/getBondsmanDetails", { params: { search } }),
-        axiosInstace.get("/api/v1/admin/getTotalUsersCount", { params: { search } }),
-        axiosInstace.get("/api/v1/admin/getAllUsers", { params: { search } }),
+      setLoading(prev => ({ ...prev, users: true }));
+      setError(prev => ({ ...prev, users: "" }));
+      
+      const [usersRes, countRes] = await Promise.all([
+        axiosInstace.get("/api/v1/admin/getAllUsers", { 
+          params: { search } 
+        }),
+        axiosInstace.get("/api/v1/admin/getTotalUsersCount", { 
+          params: { search } 
+        })
       ]);
 
-      setBondsman(bondsmanRes?.data?.isBondsmanAllExist || []);
-      setUsers(usersData?.data?.User || []);
-      setUsersCount(usersRes?.data?.count || 0);
+      setUsers(usersRes?.data?.User || []);
+      setUsersCount(countRes?.data?.count || 0);
     } catch (err) {
-      setError(err?.response?.data?.message || "Something went wrong");
+      setError(prev => ({ 
+        ...prev, 
+        users: err?.response?.data?.message || "Something went wrong" 
+      }));
     } finally {
-      setLoading(false);
+      setLoading(prev => ({ ...prev, users: false }));
+    }
+  };
+
+  const fetchBondsman = async (search = "") => {
+    try {
+      setLoading(prev => ({ ...prev, bondsman: true }));
+      setError(prev => ({ ...prev, bondsman: "" }));
+      
+      const bondsmanRes = await axiosInstace.get("/api/v1/admin/getBondsmanDetails", { 
+        params: { search } 
+      });
+
+      setBondsman(bondsmanRes?.data?.isBondsmanAllExist || []);
+    } catch (err) {
+      setError(prev => ({ 
+        ...prev, 
+        bondsman: err?.response?.data?.message || "Something went wrong" 
+      }));
+    } finally {
+      setLoading(prev => ({ ...prev, bondsman: false }));
+    }
+  };
+
+  // Initial fetch for both
+  const fetchAllData = async () => {
+    try {
+      setLoading({ users: true, bondsman: true });
+      setError({ users: "", bondsman: "" });
+      
+      Swal.fire({
+        title: "Loading...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      const [usersRes, countRes, bondsmanRes] = await Promise.all([
+        axiosInstace.get("/api/v1/admin/getAllUsers"),
+        axiosInstace.get("/api/v1/admin/getTotalUsersCount"),
+        axiosInstace.get("/api/v1/admin/getBondsmanDetails")
+      ]);
+
+      setUsers(usersRes?.data?.User || []);
+      setUsersCount(countRes?.data?.count || 0);
+      setBondsman(bondsmanRes?.data?.isBondsmanAllExist || []);
+
+      Swal.close();
+    } catch (err) {
+      setError({ 
+        users: err?.response?.data?.message || "Something went wrong",
+        bondsman: err?.response?.data?.message || "Something went wrong"
+      });
+      Swal.close();
+    } finally {
+      setLoading({ users: false, bondsman: false });
     }
   };
 
   // Initial fetch
   useEffect(() => {
-    fetchData();
+    fetchAllData();
   }, []);
 
-  // Debounce search
- useEffect(() => {
-  const delay = setTimeout(() => {
-    fetchData(userSearchTerm);
-  }, 500);
-  return () => clearTimeout(delay);
-}, [userSearchTerm]);
+  // Debounced search for users
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      fetchUsers(userSearchTerm);
+    }, 500);
+    
+    return () => clearTimeout(delay);
+  }, [userSearchTerm]);
 
-useEffect(() => {
-  const delay = setTimeout(() => {
-    fetchData(bondsmanSearchTerm);
-  }, 500);
-  return () => clearTimeout(delay);
-}, [bondsmanSearchTerm]);
-
+  // Debounced search for bondsman
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      fetchBondsman(bondsmanSearchTerm);
+    }, 500);
+    
+    return () => clearTimeout(delay);
+  }, [bondsmanSearchTerm]);
 
   const handleAddClick = (type) => {
     setCurrentType(type);
-    if (type === "User") setShowAddUser(true);
-    else setShowAddBondsman(true);
+    if (type === "User") {
+      setShowAddUser(true);
+      setShowAddBondsman(false);
+    } else {
+      setShowAddBondsman(true);
+      setShowAddUser(false);
+    }
     navigate(`/Add${type}`, { state: { candidate: type } });
   };
 
@@ -238,7 +303,6 @@ useEffect(() => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
-
       if (selectedFile.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (e) => setFilePreview(e.target.result);
@@ -296,6 +360,11 @@ useEffect(() => {
 
   return (
     <div style={{ backgroundColor: "#F9F9F9", minHeight: "100vh" }}>
+      {/* Mobile Toggle Button */}
+      <button className={styles.toggleBtn} onClick={toggleSidebar}>
+        ☰
+      </button>
+
       {/* Sidebar */}
       <div className={`${styles.leftSideBar} ${isSideOpen ? styles.open : ""}`}>
         <Sidebar />
@@ -358,49 +427,97 @@ useEffect(() => {
               Upload File
             </button>
           )}
-          {uploadStatus === "uploading" && <p>Uploading...</p>}
-       {uploadStatus === "completed" && file && (
-  <div style={{ display: "flex", padding: "110px", paddingTop: "11px", justifyContent: "space-between", marginTop: "10px", fontWeight: 600, color: "#000000" }}>
-    <span>{file.name}</span>
-    
+          {uploadStatus === "uploading" && <p style={{marginTop:"20px"}}>Uploading...</p>}
+         {uploadStatus === "completed" && file && (
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: "10px",
+      fontWeight: 600,
+      color: "#000000",
+      padding:
+        window.innerWidth < 768
+          ? "10px 12px"
+          : "110px",
+      paddingTop: "11px",
+    }}
+  >
+    <span
+      style={{
+        maxWidth: window.innerWidth < 768 ? "65%" : "auto",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
+      }}
+    >
+      {file.name}
+    </span>
+
     <span style={{ display: "flex", alignItems: "center" }}>
-      <img src="/tick-circle.png" style={{ height: "26px", width: "24px", marginRight: "6px" }} alt="Completed" />
+      <img
+        src="/tick-circle.png"
+        style={{
+          height: window.innerWidth < 768 ? "20px" : "26px",
+          width: window.innerWidth < 768 ? "18px" : "24px",
+          marginRight: "6px",
+        }}
+        alt="Completed"
+      />
       Completed
     </span>
   </div>
 )}
+
         </div>
 
-        {/* DataTable */}
+        {/* DataTable for Users */}
         <div className={styles.tableContainer}>
           {showAddUser ? (
-            <AddUser candidate={currentType} />
+            <AddUser 
+              candidate={currentType} 
+              onBack={() => {
+                setShowAddUser(false);
+                fetchUsers();
+              }}
+            />
           ) : (
             <DataTable
               candidate="User"
               listName="User List"
               data={users}
-              loading={loading}
-              error={error}
-              fetchData={fetchData}
+              loading={loading.users}
+              error={error.users}
+              fetchData={fetchUsers} // Pass only users fetch function
               deletAPI="/api/v1/admin/deleteUserProfile"
               searchTerm={userSearchTerm}
-  setSearchTerm={setUserSearchTerm}
+              setSearchTerm={setUserSearchTerm}
             />
           )}
+        </div>
+
+        {/* DataTable for Bondsman */}
+        <div className={styles.tableContainer}>
           {showAddBondsman ? (
-            <AddUser candidate={currentType} />
+            <AddUser 
+              candidate={currentType}
+              onBack={() => {
+                setShowAddBondsman(false);
+                fetchBondsman();
+              }}
+            />
           ) : (
             <DataTable
               candidate="Bondsman"
               listName="Bondsman User List"
               data={bondsman}
-              loading={loading}
-              error={error}
-              fetchData={fetchData}
+              loading={loading.bondsman}
+              error={error.bondsman}
+              fetchData={fetchBondsman} // Pass only bondsman fetch function
               deletAPI="/api/v1/admin/deleteBondsmanProfile"
-             searchTerm={bondsmanSearchTerm}
-  setSearchTerm={setBondsmanSearchTerm}
+              searchTerm={bondsmanSearchTerm}
+              setSearchTerm={setBondsmanSearchTerm}
             />
           )}
         </div>

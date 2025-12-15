@@ -243,6 +243,8 @@ const EditUserForm = () => {
   const { state } = useLocation();
   const user = state?.user;
 
+  const [phoneError, setPhoneError] = useState("");
+
   // --------------------------
   // 🔵 Extract dial code + number from DB
   // --------------------------
@@ -347,13 +349,48 @@ const EditUserForm = () => {
     [e.target.name]: e.target.value,   // ← correct syntax
   });
 };
-  const handleCellPhoneChange = (e) => {
-  const onlyNums = e.target.value.replace(/\D/g, ""); 
+ const handleCellPhoneChange = (e) => {
+  const onlyNums = e.target.value.replace(/\D/g, "");
+
+  if (onlyNums.length > 10) return;
+
   setFormData({
     ...formData,
-    cellPhone: onlyNums
+    cellPhone: onlyNums,
+  });
+
+  if (onlyNums.length === 0) {
+    setPhoneError("Phone number is required");
+  } else if (onlyNums.length < 10) {
+    setPhoneError("Phone number must be 10 digits");
+  } else {
+    setPhoneError("");
+  }
+};
+const handleTextOnlyChange = (e) => {
+  const { name, value } = e.target;
+
+  // sirf A–Z, a–z aur space allow
+  const onlyText = value.replace(/[^a-zA-Z\s]/g, "");
+
+  setFormData({
+    ...formData,
+    [name]: onlyText,
   });
 };
+
+const isFormValid =
+  formData.firstName.trim().length >= 3 &&
+  formData.lastName.trim().length >= 3 &&
+  formData.email.trim() !== "" &&
+  formData.cellPhone.length === 10 &&
+  phoneError === "" &&
+  (
+    formData.middleName.trim() === "" ||
+    formData.middleName.trim().length >= 3
+  );
+
+
 
   // --------------------------
   // UPDATE API CALL
@@ -452,8 +489,7 @@ const updateUser = async () => {
                 <input
                   name="firstName"
                   value={formData.firstName}
-                  onChange={handleChange}
-                  placeholder="Enter First Name"
+  onChange={handleTextOnlyChange}                  placeholder="Enter First Name"
                   className="form-input"
                 />
               </div>
@@ -463,8 +499,7 @@ const updateUser = async () => {
                 <input
                   name="middleName"
                   value={formData.middleName}
-                  onChange={handleChange}
-                  placeholder="Enter Middle Name"
+  onChange={handleTextOnlyChange}                  placeholder="Enter Middle Name"
                   className="form-input"
                 />
               </div>
@@ -478,8 +513,7 @@ const updateUser = async () => {
               <input
                 name="lastName"
                 value={formData.lastName}
-                onChange={handleChange}
-                placeholder="Enter Last Name"
+  onChange={handleTextOnlyChange}                placeholder="Enter Last Name"
                 className="form-input"
               />
             </div>
@@ -529,7 +563,7 @@ const updateUser = async () => {
       value={formData.cellPhone}
       onChange={handleCellPhoneChange}
       className="phone-input"
-      maxLength={15}
+      maxLength={10}
       placeholder="Enter Phone Number"
     />
 
@@ -553,15 +587,26 @@ const updateUser = async () => {
           </div>
         ))}
       </div>
+      
     )}
   </div>
+  {phoneError && (
+  <span style={{ color: "red", fontSize: "12px" }}>
+    {phoneError}
+  </span>
+)}
 </div>
 
 
             {/* SAVE BUTTON */}
-            <button className="save-button" disabled={loading} onClick={updateUser}>
-              {loading ? "Saving..." : "Save"}
-            </button>
+           <button
+  className="save-button"
+  disabled={!isFormValid || loading}
+  onClick={updateUser}
+>
+  {loading ? "Saving..." : "Save"}
+</button>
+
           </form>
         </div>
       </div>

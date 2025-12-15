@@ -2,12 +2,12 @@
    MASTER WRAPPER — Keeps consistent spacing
 ======================================= */
 .pageWrapper {
-margin: 25px;
+  margin: 25px;
   padding: 20px;
   transition: 0.3s ease;
   max-width: 100%;
+  margin-top: -20px;
 }
-
 
 /* Tablet */
 @media (max-width: 1024px) {
@@ -25,11 +25,12 @@ margin: 25px;
 }
 
 /* =======================================
-   TABLE WRAPPER
+   TABLE WRAPPER — FIXED SCROLLBAR VISIBILITY
 ======================================= */
 .tableContainer {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: auto;              /* Horizontal scroll when needed */
+  overflow-y: hidden;            /* No vertical scroll */
   background: white;
   border-radius: 14px;
   border: 1px solid #6B7280;
@@ -37,6 +38,34 @@ margin: 25px;
   padding-bottom: 15px;
   padding-top: 15px;
   box-sizing: border-box;
+  min-width: 100%;
+  -ms-overflow-style: scrollbar; /* IE/Edge scrollbar */
+  scrollbar-width: auto;         /* Firefox scrollbar */
+}
+
+/* Custom scrollbar for Webkit (Chrome/Safari) — Make it visible and styled */
+.tableContainer::-webkit-scrollbar {
+  height: 8px;                   /* Thicker for visibility */
+  display: block !important;     /* Force show if hidden */
+}
+
+.tableContainer::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.tableContainer::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.tableContainer::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Ensure mouse wheel scrolls the container */
+.tableContainer {
+  scroll-behavior: smooth;
 }
 
 .tableContainer::-webkit-scrollbar {
@@ -68,8 +97,15 @@ margin: 25px;
 }
 
 /* =======================================
-   TABLE STYLING
+   TABLE STYLING — FIXED COLUMN WIDTHS & NO OVERFLOW
 ======================================= */
+.bondsmanTable {
+  width: 100%;
+  min-width: 1000px;             /* Force horizontal scroll on smaller screens */
+  border-collapse: collapse;
+  table-layout: fixed;           /* Lock column widths */
+}
+
 .bondsmanTable th {
   background-color: #D9D9D9;
   text-align: left;
@@ -79,46 +115,98 @@ margin: 25px;
   font-size: 18px;
 }
 
+/* FIXED WIDTHS: Adjusted Action to 20% for buttons + consistent spacing */
+.bondsmanTable th:nth-child(1) { width: 8%; }   /* Avatar */
+.bondsmanTable th:nth-child(2) { width: 20%; }  /* Username */
+.bondsmanTable th:nth-child(3) { width: 20%; }  /* Email */
+.bondsmanTable th:nth-child(4) { width: 15%; }  /* Phone (reduced slightly for balance) */
+.bondsmanTable th:nth-child(5) { width: 5%; }  /* Status (reduced) */
+.bondsmanTable th:nth-child(6) { width: 16%; }  /* Action (increased for buttons) */
+
 .bondsmanTable td {
-  padding: 12px 16px;
+  padding: 8px 8px;
   border-top: 1px solid #eee;
   vertical-align: middle;
+  overflow: hidden;              /* Prevent overflow */
+  text-overflow: ellipsis;       /* Truncate long text */
+  white-space: nowrap;           /* No wrapping */
+  font-size: 15px;
 }
+
+/* Match TD widths to TH */
+.bondsmanTable td:nth-child(1) { width: 8%; }
+.bondsmanTable td:nth-child(2) { width: 12%; }
+.bondsmanTable td:nth-child(3) { width: 25%; }
+.bondsmanTable td:nth-child(4) { width: 15%; }
+.bondsmanTable td:nth-child(5) { width: 10%; }
+.bondsmanTable td:nth-child(6) { width: 20%; }
 
 .bondsmanTable tr:hover {
   background-color: #f9f9f9;
 }
 
-/* Buttons */
+/* Buttons — Consistent spacing inside Action column */
 .actionBtn {
-  margin: 6px;
+  margin: 0;                     /* Remove old margins */
   border: none;
   border-radius: 4px;
-  padding: 6px 8px;
+  padding: 6px 12px;             /* Balanced padding */
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
   transition: 0.2s ease;
+  min-width: 60px;               /* Fixed width for consistency */
+  text-align: center;            /* Center text */
 }
 
 .editBtn {
   background-color: #008000;
   color: white;
 }
-
+.editBtn, .deleteBtn , .statusActive {
+    min-width: 65px;
+  }
 .deleteBtn {
   background-color: #ff0000;
   color: white;
 }
 
-/* Status Tags */
+/* Action Buttons Container — Same space, no overflow */
+.actionButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;   /* Align left to fit better */
+  gap: 15px;                      /* Reduced gap for same space without overflow */
+  white-space: nowrap;
+  width: 100%;                   /* Use full column width */
+  overflow: hidden;        
+  margin-left: 5px;      /* Hide any extra */
+  
+}
+
+/* Status Tags — Consistent with buttons */
 .statusActive,
 .statusNonActive {
-  padding: 5px 10px;
   border-radius: 4px;
   font-size: 13px;
   color: white;
+
 }
+/* Status ko buttons jaisi same width dene ke liye */
+.statusActive,
+.statusNonActive {
+  min-width: 65px;          /* same as Edit/Delete */
+  height: 28px;
+}
+.statusActive,
+.statusNonActive {
+  display: flex;
+  align-items: center;     /* vertical center */
+  justify-content: center; /* horizontal center */
+  text-align: center;
+}
+
 
 .statusActive {
   background-color: #008000;
@@ -142,16 +230,14 @@ margin: 25px;
 
 .searchBox {
   display: flex;
-   display: flex;
-  align-items: center;        /* vertical center */
-  justify-content: center;    /* horizontal center */
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background-color: #fff;
   color: white;
   padding: 8px 12px;
   border-radius: 6px;
-  border:1px solid #D9D9D9 !important ; 
+  border: 1px solid #D9D9D9 !important;
 }
 
 .searchBox input {
@@ -167,13 +253,13 @@ margin: 25px;
 .searchBox input {
   font-size: 16px !important;
 }
+
 .searchBox input::placeholder {
   color: #000;
-  
 }
 
 /* =======================================
-   MOBILE: Keep Title Left & Search Right
+   MOBILE: Keep Title Left & Search Right — REVERTED TO ORIGINAL
 ======================================= */
 @media (max-width: 768px) {
   .headerBar {
@@ -206,6 +292,28 @@ margin: 25px;
     padding: 8px 10px;
     font-size: 13px;
   }
+
+  /* REVERTED: Original mobile button styles */
+  .actionBtn {
+    padding: 1px 1px !important;
+    font-size: 11px;
+    margin: 2px;
+    white-space: nowrap;
+    min-width: auto; /* Remove fixed min-width for mobile */
+  }
+
+  .editBtn, .deleteBtn {
+    min-width: 45px;
+  }
+
+  /* REVERTED: Original action column overflow */
+  .bondsmanTable td:last-child {
+    overflow: visible !important;
+    text-overflow: unset !important;
+  }
+
+  /* REVERTED: No extra width for action column; use desktop widths */
+  /* No .actionButtons gap override or width changes */
 }
 
 /* EXTRA SMALL devices */
@@ -227,9 +335,7 @@ margin: 25px;
   display: flex;
   justify-content: center;
   gap: 10px;
-  border-top: 1px solid rgba(0,0,0,0.15);
-  padding-top: 12px;
-
+  width: 100%;
 }
 
 .pagination button {
@@ -248,48 +354,19 @@ margin: 25px;
 .activePage {
   font-weight: bolder;
 }
-@media (max-width: 768px) {
-  /* ❌ DON’T hide overflow for cells with buttons */
-  .bondsmanTable td:last-child {
-    overflow: visible !important;
-    text-overflow: unset !important;
-  }
-
-  /* Buttons shrink but visible */
-  .actionBtn {
-    padding: 4px 6px !important;
-    font-size: 11px;
-    margin: 2px;
-    white-space: nowrap;
-  }
-
-  .editBtn, .deleteBtn {
-    min-width: 45px;
-  }
-}
-.actionButtons {
-  display: flex;
-  flex-direction: row !important; /* FORCE ROW */
-  align-items: center;
-  justify-content: center;
-  gap: 10px; /* space between buttons */
-  white-space: nowrap; /* prevent wrap */
-}
-
-.actionButtons button {
-  min-width: 60px; /* avoid shrinking */
-}
 
 * {
   font-family: "Lexend", sans-serif !important;
 }
+
 .titleClass{
   font-size: "18px";
   font-weight: 500;
 }
+
 .searchBox {
   position: relative;
-  width: 210px;      /* adjust if needed */
+  width: 220px;      /* adjust if needed */
   background-color: "#0001FC";
    display: flex;
   align-items: center;        /* vertical center */
@@ -309,6 +386,7 @@ margin: 25px;
 .searchBox input::placeholder {
   color: #000;  /* 🔥 white placeholder */
   font-size: 13px;
+  font-weight: 400;
 }
 
 /* 🔎 Search Icon Style */
@@ -330,7 +408,7 @@ margin: 25px;
   gap: 8px;
   background-color: #fff;
   color: white;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid #D9D9D9 !important;
   
@@ -357,53 +435,61 @@ margin: 25px;
   background-color: #D9D9D9 !important;
   z-index: 100;
 }
+
 /* FIXED: Prevent column width change → header stable */
 .bondsmanTable {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;  /* 🔒 FIXED: Prevent column widths from changing based on content */
 }
+@media (max-width: 768px) {
 
-/* FIXED: Assign specific widths to columns to keep them stable */
-.bondsmanTable th {
-  background-color: #D9D9D9;
-  text-align: left;
-  font-weight: 400;
-  white-space: nowrap;
-  padding: 12px 16px;
-  font-size: 18px;
+  /* 🔒 FIX: Stop size jumping */
+  .actionButtons {
+    gap: 8px;
+    margin-left: 0;
+  }
+
+  /* 🔒 FIX: Buttons equal & stable */
+  .actionBtn {
+    min-width: 48px !important;
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+    height: 26px;
+  }
+
+  .editBtn,
+  .deleteBtn {
+    min-width: 48px !important;
+  }
+
+  /* 🔒 FIX: Status same size as buttons */
+  .statusActive,
+  .statusNonActive {
+    min-width: 48px !important;
+    height: 26px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 🔒 FIX: Prevent column stretching */
+  .bondsmanTable td,
+  .bondsmanTable th {
+    white-space: nowrap;
+  }
 }
-
-.bondsmanTable th:nth-child(1) { width: 8%; } /* Avatar */
-.bondsmanTable th:nth-child(2) { width: 22%; } /* Username */
-.bondsmanTable th:nth-child(3) { width: 25%; } /* Email */
-.bondsmanTable th:nth-child(4) { width: 18%; } /* Phone */
-.bondsmanTable th:nth-child(5) { width: 12%; } /* Status */
-.bondsmanTable th:nth-child(6) { width: 15%; } /* Action */
 
 .bondsmanTable td {
-  padding: 12px 16px;
-  border-top: 1px solid #eee;
-  vertical-align: middle;
-  /* FIXED: Inherit widths from th for stability */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  border-top: 1px solid #6B7280;  /* grey-300 */
 }
 
-.bondsmanTable td:nth-child(1) { width: 8%; } /* Avatar */
-.bondsmanTable td:nth-child(2) { width: 22%; } /* Username */
-.bondsmanTable td:nth-child(3) { width: 25%; } /* Email */
-.bondsmanTable td:nth-child(4) { width: 18%; } /* Phone */
-.bondsmanTable td:nth-child(5) { width: 12%; } /* Status */
-.bondsmanTable td:nth-child(6) { width: 15%; } /* Action */
-
-/* 🔥 FIX TABLE HEADER — Always stay at top */
-.bondsmanTable thead th {
-  position: sticky;
-  top: 0;
-  background-color: #D9D9D9 !important;
-  z-index: 100;
+.bondsmanTable tbody tr:first-child td {
+    border-top: none;  
 }
-
-/* Mobile adjustments */
+/* Keep bottom border for the last row but add spacing below */
+.bondsmanTable tbody tr:last-child td {
+    padding-bottom: 12px;   /* extra spacing below content */
+    border-bottom: 1px solid #6B7280;  /* visible bottom border */
+}

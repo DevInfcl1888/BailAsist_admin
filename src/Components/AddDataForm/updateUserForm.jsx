@@ -96,7 +96,7 @@ const UpdateUser = () => {
           </div>
 
           <div className={styles.inputGroup}>
-            <label>
+            <label className="form-label">
               Email<span>*</span>
             </label>
             <input
@@ -109,7 +109,7 @@ const UpdateUser = () => {
           </div>
 
           <div className={styles.inputGroup}>
-            <label>
+            <label className="form-label">
               Phone number<span>*</span>
             </label>
             <input

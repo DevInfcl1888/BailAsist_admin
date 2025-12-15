@@ -110,7 +110,7 @@ export default function Privacy() {
               onClick={savePrivacyPolicy}
               disabled={loading}
             >
-              {loading ? "Saving..." : "Save"}
+              {loading ? "Creating..." : "Create"}
             </button>
           </div>
         </div>

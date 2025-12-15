@@ -38,6 +38,7 @@
   box-sizing: border-box;
   margin-left: 24%;
   padding-right: 20px;
+  height: 100%;
 }
 
 .title {
@@ -295,9 +296,9 @@ filter: brightness(0.95);
 .wrapper {
   display: flex;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   background: #f4f6f8;
-  padding: 20px;
+  padding: 30px;
   padding-left: 280px; /* sidebar width + margin */
   box-sizing: border-box;
 }
@@ -312,7 +313,9 @@ filter: brightness(0.95);
   box-shadow: 0 6px 18px rgba(12, 20, 30, 0.08);
   padding: 24px 28px;
   box-sizing: border-box;
-  margin-left: 0; /* wrapper ke padding se adjust ho raha hai */
+  margin-left: 0; 
+  padding-bottom: 70px;
+  height: 100%;
 }
 
 /* Sidebar */

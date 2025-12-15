@@ -20,6 +20,7 @@ const UpdateBondsman = () => {
  const location = useLocation();
 
 
+const [phoneError, setPhoneError] = useState("");
 
   const [profileImage, setProfileImage] = useState(null);
   const [profilePreview, setProfilePreview] = useState(null);
@@ -106,20 +107,45 @@ useEffect(() => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleCellPhoneChange = (e) => {
-  const onlyNums = e.target.value.replace(/\D/g, ""); 
+const handleCellPhoneChange = (e) => {
+  const onlyNums = e.target.value.replace(/\D/g, "");
+
+  if (onlyNums.length > 10) return;
+
   setFormData({
     ...formData,
-    cellPhone: onlyNums
+    cellPhone: onlyNums,
+  });
+
+  if (onlyNums.length === 0) {
+    setPhoneError("Phone number is required");
+  } else if (onlyNums.length < 10) {
+    setPhoneError("Phone number must be 10 digits");
+  } else {
+    setPhoneError("");
+  }
+};
+
+const handleTextOnlyChange = (e) => {
+  const { name, value } = e.target;
+
+  // Sirf letters + space allow
+  const onlyText = value.replace(/[^a-zA-Z\s]/g, "");
+
+  setFormData({
+    ...formData,
+    [name]: onlyText,
   });
 };
 
 
-  const isFormValid =
-    formData.name.trim() !== "" &&
-    formData.phone.trim() !== "" &&
-    formData.email.trim() !== "" &&
-    formData.cellPhone.trim() !== "";
+
+ const isFormValid =
+  formData.name.trim().length >= 3 &&
+  formData.email.trim() !== "" &&
+  formData.cellPhone.length === 10 &&
+  phoneError === "";
+
 
   const fileInputRef = useRef(null);
 
@@ -179,18 +205,20 @@ useEffect(() => {
 
       <form className={styles.formWrapper}>
         <div className={styles.formGroup}>
-          <label>Full Name *</label>
+          <label className="form-label">Username <span className="required">*</span></label>
           <input
             type="text"
             placeholder="Enter Name"
             name="name"
-            onChange={handleInputChange}
+  onChange={handleTextOnlyChange}
             value={formData.name}
+                            className="form-input"
+
           />
         </div>
 
         <div className={styles.formGroup}>
-          <label>Email *</label>
+          <label className="form-label">Email Address <span className="required">*</span> </label> 
           <input
             type="email"
             maxLength={30} 
@@ -198,11 +226,13 @@ useEffect(() => {
             name="email"
             onChange={handleInputChange}
             value={formData.email}
+                            className="form-input"
+
           />
         </div>
 
       <div className={styles.formGroup}>
-  <label>Cell Phone *</label>
+  <label className="form-label">Cell Phone Number <span className="required">*</span></label>
 
   <div className={styles.phoneContainer}>
     <div
@@ -223,17 +253,24 @@ useEffect(() => {
       <span className={styles.code}>{selectedCountry.dial_code}</span>
       <span className={styles.arrow}><img src="/Vector (7).png" style={{height:"11px" , width:"7px"}} /></span>
     </div>
+    
+
     <input
       type="tel"
       placeholder="(000) 000-0000"
       name="cellPhone"
   onChange={handleCellPhoneChange}
       value={formData.cellPhone}      
-       maxLength={15} 
+       maxLength={10} 
       className={styles.phoneInput}
       style={{border:"none"}}
     />
   </div>
+  {phoneError && (
+  <span style={{ color: "red", fontSize: "12px" }}>
+    {phoneError}
+  </span>
+)}
 
   {showDropdown && (
     <div className={styles.dropdown}>
@@ -259,7 +296,7 @@ useEffect(() => {
           disabled={!isFormValid}
           onClick={handleUpload}
         >
-          {loading ? "Updaing..." :"Update"}
+          {loading ? "Saving..." :"Save"}
         </button>
       </form>
     </div>

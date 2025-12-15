@@ -275,8 +275,10 @@ input[type="password"] {
   }
 
   .adminLogo {
-    width: 100px;
-    margin-top: 15px;
+    width: 175px;
+    margin-top: 35px;
+    height: 155px;
+    margin-bottom: -50px;
   }
 
   .loader {
@@ -289,9 +291,32 @@ input[type="password"] {
 @media (max-width: 480px) {
   .inputWrapper input {
     font-size: 16px;
-    padding: 10px 36px 10px 10px;
+    
   }
   .button {
     font-size: 16px;
+  }
+  input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px 281px 12px 12px;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+}
+
+.errorMessage{
+  color: #ec0909;
+}
+@media (max-width: 480px) {
+  .inputWrapper input,
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px 44px 12px 12px; /* ✅ eye icon ke liye enough */
+    box-sizing: border-box;
   }
 }
